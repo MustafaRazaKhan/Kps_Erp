@@ -1,27 +1,28 @@
-export const initialState = {
-  transports: [],
+import { TransportStateType } from "../types/transport.type";
 
-  transport: {
-    transportNumber: "",
-    vehicleType: "bus",
+export const initialState: TransportStateType = {
+  transportObj: {
+    transportId: "",
+
+    vehicleType: "",
+
     registrationNumber: "",
-    vehicleModel: "",
-    seatingCapacity: "",
 
-    driver: {
-      name: "",
-      phone: "",
-      licenseNumber: "",
-    },
+    seatingCapacity: null,
 
-    maintenanceHistory: [],
+    name: "",
 
-    status: "active",
+    phone: "",
+
+    licenseNumber: "",
   },
 
+  maintenanceHistory: [],
+
   loading: false,
-  error: null,
-  message: null,
+
+  status: "active",
+  transportList: [],
 };
 
 export default initialState;

@@ -1,9 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
-const transportSchema = new mongoose.Schema(
+const TransportSchema = new Schema(
   {
-    // Vehicle
-    transportNumber: {
+    transportId: {
       type: String,
       required: true,
       unique: true,
@@ -13,7 +12,7 @@ const transportSchema = new mongoose.Schema(
     vehicleType: {
       type: String,
       enum: ["bus", "van", "car", "other"],
-      default: "bus",
+      required: true,
     },
 
     registrationNumber: {
@@ -23,65 +22,82 @@ const transportSchema = new mongoose.Schema(
       trim: true,
     },
 
+    vehicleModel: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     seatingCapacity: {
       type: Number,
       required: true,
     },
 
-    // Driver
-    driver: {
-      name: {
-        type: String,
-        required: true,
-        trim: true,
-      },
+    // ========================================
+    // DRIVER INFORMATION
+    // ========================================
 
-      phone: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-
-      licenseNumber: {
-        type: String,
-        required: true,
-        trim: true,
-      },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
 
-    // Maintenance
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    licenseNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    // ========================================
+    // STATUS
+    // ========================================
+
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
+
+    // ========================================
+    // MAINTENANCE HISTORY
+    // ========================================
+
     maintenanceHistory: [
       {
         date: {
-          type: Date,
+          type: String,
           required: true,
         },
 
         description: {
           type: String,
-          trim: true,
+          default: "",
         },
 
         cost: {
           type: Number,
           default: 0,
         },
+
+        status: {
+          type: String,
+          default: "",
+        },
       },
     ],
-
-    // Status
-    status: {
-      type: String,
-      enum: ["active", "maintenance", "inactive"],
-      default: "active",
-    },
   },
   {
     timestamps: true,
   },
 );
 
-const Transport =
-  mongoose.models.Transport || mongoose.model("Transport", transportSchema);
+const Transport = models.Transport || model("Transport", TransportSchema);
 
 export default Transport;

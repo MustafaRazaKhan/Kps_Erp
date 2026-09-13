@@ -1,44 +1,56 @@
 import { NextResponse } from "next/server";
+
 import connectDB from "@/utils/mongodb";
 import Transport from "@/models/Transport";
 
 // ========================================
 // POST - Create New Transport
 // ========================================
+
 export async function POST(request: Request) {
   try {
     await connectDB();
 
     const body = await request.json();
+    console.log(body);
 
     const {
-      transportNumber,
+      transportId,
       vehicleType,
       registrationNumber,
-      vehicleModel,
-      manufacturer,
-      manufacturingYear,
+
       seatingCapacity,
-      driver,
+      name,
+      phone,
+      licenseNumber,
       status,
-      isActive,
     } = body;
 
-    // ==============================
-    // Required field validation
-    // ==============================
+    // ========================================
+    // REQUIRED FIELD VALIDATION
+    // ========================================
 
-    if (!transportNumber) {
+    if (!transportId?.trim()) {
       return NextResponse.json(
         {
           success: false,
-          message: "Transport number is required",
+          message: "Transport ID is required",
         },
         { status: 400 },
       );
     }
 
-    if (!registrationNumber) {
+    if (!vehicleType) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Vehicle type is required",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (!registrationNumber?.trim()) {
       return NextResponse.json(
         {
           success: false,
@@ -48,7 +60,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!seatingCapacity) {
+    if (seatingCapacity == null) {
       return NextResponse.json(
         {
           success: false,
@@ -58,11 +70,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // ==============================
-    // Driver validation
-    // ==============================
+    // ========================================
+    // DRIVER VALIDATION
+    // ========================================
 
-    if (!driver?.name) {
+    if (!name?.trim()) {
       return NextResponse.json(
         {
           success: false,
@@ -72,7 +84,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!driver?.phone) {
+    if (!phone?.trim()) {
       return NextResponse.json(
         {
           success: false,
@@ -82,7 +94,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!driver?.licenseNumber) {
+    if (!licenseNumber?.trim()) {
       return NextResponse.json(
         {
           success: false,
@@ -92,14 +104,18 @@ export async function POST(request: Request) {
       );
     }
 
-    // ==============================
-    // Check duplicate transport
-    // ==============================
+    // ========================================
+    // CHECK DUPLICATE TRANSPORT
+    // ========================================
 
     const existingTransport = await Transport.findOne({
       $or: [
-        { transportNumber: transportNumber.trim() },
-        { registrationNumber: registrationNumber.trim() },
+        {
+          transportId: transportId.trim(),
+        },
+        {
+          registrationNumber: registrationNumber.trim(),
+        },
       ],
     });
 
@@ -107,41 +123,41 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "Transport number or registration number already exists",
+          message: "Transport ID or registration number already exists",
         },
         { status: 409 },
       );
     }
 
-    // ==============================
-    // Create Transport
-    // ==============================
+    // ========================================
+    // CREATE TRANSPORT
+    // ========================================
 
     const transport = await Transport.create({
-      transportNumber: transportNumber.trim(),
-      vehicleType,
-      registrationNumber: registrationNumber.trim(),
-      vehicleModel,
-      manufacturer,
-      manufacturingYear,
-      seatingCapacity,
+      transportId: transportId.trim(),
 
-      driver: {
-        name: driver.name.trim(),
-        phone: driver.phone.trim(),
-        licenseNumber: driver.licenseNumber.trim(),
-        licenseExpiryDate: driver.licenseExpiryDate || null,
-        address: driver.address?.trim() || "",
-        joiningDate: driver.joiningDate || null,
-      },
+      vehicleType,
+
+      registrationNumber: registrationNumber.trim(),
+
+      seatingCapacity: Number(seatingCapacity),
+
+      // Driver information
+      name: name.trim(),
+
+      phone: phone.trim(),
+
+      licenseNumber: licenseNumber.trim(),
 
       status: status || "active",
-      isActive: isActive ?? true,
 
       // New transport starts with empty maintenance history
       maintenanceHistory: [],
     });
-    console.log(Transport);
+
+    // ========================================
+    // RESPONSE
+    // ========================================
 
     return NextResponse.json(
       {
@@ -151,16 +167,27 @@ export async function POST(request: Request) {
       },
       { status: 201 },
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Create Transport Error:", error);
 
-    // Handle MongoDB duplicate key error
+    // ========================================
+    // MONGODB DUPLICATE KEY ERROR
+    // ========================================
+
+    if (error?.code === 11000) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Transport ID or registration number already exists",
+        },
+        { status: 409 },
+      );
+    }
 
     return NextResponse.json(
       {
         success: false,
         message: "Failed to create transport",
-        // error: error.message,
       },
       { status: 500 },
     );
@@ -170,31 +197,3 @@ export async function POST(request: Request) {
 // ========================================
 // GET - Get All Transports
 // ========================================
-export async function GET() {
-  try {
-    await connectDB();
-
-    const transports = await Transport.find({}).sort({ createdAt: -1 }).lean();
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Transports fetched successfully",
-        count: transports.length,
-        data: transports,
-      },
-      { status: 200 },
-    );
-  } catch (error) {
-    console.error("Get Transports Error:", error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch transports",
-        // error: error.message,
-      },
-      { status: 500 },
-    );
-  }
-}

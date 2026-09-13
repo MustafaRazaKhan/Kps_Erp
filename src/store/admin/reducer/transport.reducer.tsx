@@ -1,123 +1,34 @@
-import { TRANSPORT_ACTIONS } from "@/types/transport/transportType";
-import { transportInitialState } from "@/initialState/transport/transportInitialState";
+import {
+  TransportStateType,
+  TransportActionType,
+} from "../types/transport.type";
 
-const transportReducer = (state, action) => {
+const transportReducer = (
+  state: TransportStateType,
+  action: TransportActionType,
+): TransportStateType => {
   switch (action.type) {
-    // =========================
-    // GET ALL TRANSPORTS
-    // =========================
-
-    case TRANSPORT_ACTIONS.GET_TRANSPORTS_REQUEST:
+    case "HANDLE_TRANSPORT_CHANGE":
       return {
         ...state,
-        loading: true,
-        error: null,
-      };
 
-    case TRANSPORT_ACTIONS.GET_TRANSPORTS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        transports: action.payload,
-        error: null,
-      };
+        transportObj: {
+          ...state.transportObj,
 
-    case TRANSPORT_ACTIONS.GET_TRANSPORTS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-
-    // =========================
-    // CREATE TRANSPORT
-    // =========================
-
-    case TRANSPORT_ACTIONS.CREATE_TRANSPORT_REQUEST:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-        message: null,
-      };
-
-    case TRANSPORT_ACTIONS.CREATE_TRANSPORT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        transports: [action.payload, ...state.transports],
-        transport: action.payload,
-        message: "Transport registered successfully",
-        error: null,
-      };
-
-    case TRANSPORT_ACTIONS.CREATE_TRANSPORT_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-
-    // =========================
-    // SET TRANSPORT
-    // =========================
-
-    case TRANSPORT_ACTIONS.SET_TRANSPORT:
-      return {
-        ...state,
-        transport: action.payload,
-        error: null,
-      };
-
-    // =========================
-    // CLEAR TRANSPORT
-    // =========================
-
-    case TRANSPORT_ACTIONS.CLEAR_TRANSPORT:
-      return {
-        ...state,
-        transport: {
-          ...transportInitialState.transport,
-          driver: {
-            ...transportInitialState.transport.driver,
-          },
-          maintenanceHistory: [],
+          [action.payload.name]: action.payload.value,
         },
       };
 
-    // =========================
-    // SET ERROR
-    // =========================
-
-    case TRANSPORT_ACTIONS.SET_ERROR:
+    case "SET_LOADING":
       return {
         ...state,
-        error: action.payload,
+        loading: action.payload,
       };
-
-    // =========================
-    // CLEAR ERROR
-    // =========================
-
-    case TRANSPORT_ACTIONS.CLEAR_ERROR:
+    case "TRANSPORT_LIST":
       return {
         ...state,
-        error: null,
+        transportList: action.payload,
       };
-
-    // =========================
-    // CLEAR MESSAGE
-    // =========================
-
-    case TRANSPORT_ACTIONS.CLEAR_MESSAGE:
-      return {
-        ...state,
-        message: null,
-      };
-
-    // =========================
-    // DEFAULT
-    // =========================
 
     default:
       return state;

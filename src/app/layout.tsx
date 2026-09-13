@@ -13,6 +13,7 @@ import { ModalProvider } from "@/store/common/context/modal.context";
 import "./globals.css";
 import Providers from "./providers";
 import { AuthProvider } from "@/store/admin/context/auth.context";
+import { TransportProvider } from "@/store/admin/context/transport.context";
 
 const OpenSans = Open_Sans({
   variable: "--font-open-sans",
@@ -42,9 +43,11 @@ export default function RootLayout({
                     <SchoolProvider>
                       <ClassProvider>
                         <UserProvider>
-                          <FeeProvider>
-                            <StudentProvider>{children}</StudentProvider>
-                          </FeeProvider>
+                          <TransportProvider>
+                            <FeeProvider>
+                              <StudentProvider>{children}</StudentProvider>
+                            </FeeProvider>
+                          </TransportProvider>
                         </UserProvider>
                       </ClassProvider>
                     </SchoolProvider>

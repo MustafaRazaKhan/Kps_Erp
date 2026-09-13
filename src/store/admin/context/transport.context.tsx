@@ -2,49 +2,53 @@
 
 import { createContext, useContext, useReducer } from "react";
 
-import transportReducer from "@/reducer/transport/transportReducer";
-import { transportInitialState } from "@/initialState/transport/transportInitialState";
-import { TRANSPORT_ACTIONS } from "@/types/transport/transportType";
+import initialState from "../initialstate/transport.state";
+import transportReducer from "../reducer/transport.reducer";
 
-const TransportContext = createContext(null);
+import { TransportContextType, TransportType } from "../types/transport.type";
+import apiPOST, { apiGET } from "@/services/api";
 
-export const TransportProvider = ({ children }: any) => {
-  const [state, dispatch] = useReducer(transportReducer, transportInitialState);
+const TransportContext = createContext<TransportContextType | null>(null);
+
+export const TransportProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [state, dispatch] = useReducer(transportReducer, initialState);
+
+  // ========================================
+  // HANDLE TRANSPORT CHANGE
+  // ========================================
+
+  const handleTransportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+
+    dispatch({
+      type: "HANDLE_TRANSPORT_CHANGE",
+
+      payload: {
+        name: name as keyof TransportType,
+
+        value:
+          type === "number" ? (value === "" ? null : Number(value)) : value,
+      },
+    });
+  };
 
   // ========================================
   // GET ALL TRANSPORTS
   // ========================================
 
-  const getTransports = async () => {
-    dispatch({
-      type: TRANSPORT_ACTIONS.GET_TRANSPORTS_REQUEST,
-    });
-
+  const transportList = async () => {
     try {
-      const response = await fetch("/api/transport");
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch transports");
-      }
-
+      const data = await apiGET("/api/admin/transport/transport-list");
       dispatch({
-        type: TRANSPORT_ACTIONS.GET_TRANSPORTS_SUCCESS,
+        type: "TRANSPORT_LIST",
         payload: data.data,
       });
-
-      return data;
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to fetch transports";
-
-      dispatch({
-        type: TRANSPORT_ACTIONS.GET_TRANSPORTS_FAILURE,
-        payload: message,
-      });
-
-      throw error;
+      console.log(error);
     }
   };
 
@@ -52,89 +56,26 @@ export const TransportProvider = ({ children }: any) => {
   // CREATE TRANSPORT
   // ========================================
 
-  const createTransport = async (transportData) => {
-    dispatch({
-      type: TRANSPORT_ACTIONS.CREATE_TRANSPORT_REQUEST,
-    });
+  const handleTransportSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     try {
-      const response = await fetch("/api/transport", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(transportData),
+      const data = await apiPOST("/api/admin/transport/create-transport", {
+        ...state.transportObj,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create transport");
-      }
-
-      dispatch({
-        type: TRANSPORT_ACTIONS.CREATE_TRANSPORT_SUCCESS,
-        payload: data.data,
-      });
-
-      return data;
+      console.log("Transport Data:", data);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to create transport";
-
-      dispatch({
-        type: TRANSPORT_ACTIONS.CREATE_TRANSPORT_FAILURE,
-        payload: message,
-      });
-
-      throw error;
+      console.log(error);
     }
-  };
-
-  // ========================================
-  // SET TRANSPORT
-  // ========================================
-
-  const setTransport = (transport) => {
-    dispatch({
-      type: TRANSPORT_ACTIONS.SET_TRANSPORT,
-      payload: transport,
-    });
-  };
-
-  // ========================================
-  // CLEAR TRANSPORT
-  // ========================================
-
-  const clearTransport = () => {
-    dispatch({
-      type: TRANSPORT_ACTIONS.CLEAR_TRANSPORT,
-    });
-  };
-
-  // ========================================
-  // CLEAR ERROR
-  // ========================================
-
-  const clearError = () => {
-    dispatch({
-      type: TRANSPORT_ACTIONS.CLEAR_ERROR,
-    });
   };
 
   return (
     <TransportContext.Provider
       value={{
         state,
-
-        // API functions
-        getTransports,
-        createTransport,
-
-        // State functions
-        setTransport,
-        clearTransport,
-        clearError,
+        handleTransportSubmit,
+        handleTransportChange,
+        transportList,
       }}
     >
       {children}
