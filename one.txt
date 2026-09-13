@@ -1,0 +1,136 @@
+<div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+            {/* PREV */}
+            <Link
+              href={
+                state.hasPrevPage
+                  ? `/dashboard/admin/user/user-list?page=${state.prevPage}`
+                  : "#"
+              }
+              className={`rounded-md px-4 py-2 text-sm transition ${
+                state.hasPrevPage
+                  ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  : "cursor-not-allowed bg-slate-50 text-slate-400"
+              }`}
+            >
+              Previous
+            </Link>
+
+            {/* PAGE NUMBERS */}
+            {Array.from({ length: state.totalPages }).map((_, i) => {
+              const pageNumber = i + 1;
+
+              return (
+                <Link
+                  key={pageNumber}
+                  href={`/dashboard/admin/user/user-list?page=${pageNumber}`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-md text-sm font-medium transition ${
+                    pageNumber === state.page
+                      ? "bg-[#003366] text-white"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  {pageNumber}
+                </Link>
+              );
+            })}
+
+            {/* NEXT */}
+            <Link
+              href={
+                state.hasNextPage
+                  ? `/dashboard/admin/user/user-list?page=${state.nextPage}`
+                  : "#"
+              }
+              className={`rounded-md px-4 py-2 text-sm transition ${
+                state.hasNextPage
+                  ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  : "cursor-not-allowed bg-slate-50 text-slate-400"
+              }`}
+            >
+              Next
+            </Link>
+          </div>
+
+
+
+
+         
+
+         // ==========================
+  
+
+  // ==========================
+  // Create Fee Structure
+  // ==========================
+  const handleSubmit = async (
+    e: React.SyntheticEvent<HTMLFormElement>
+  ) => {
+    finally {
+    //   dispatch({
+    //     type: "STOP_LOADING",
+    //   });
+    // }
+  };
+
+  // ==========================
+  // Get Fee Structures
+  // ==========================
+  const feeList = async () => {
+    try {
+      dispatch({ type: "SET_LOADING" });
+
+      const res = await fetch("/api/admin/fee-structure");
+      const data = await res.json();
+
+      dispatch({
+        type: "SET_FEE_STRUCTURES",
+        payload: data.data,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to fetch fee structures");
+    } finally {
+      dispatch({
+        type: "STOP_LOADING",
+      });
+    }
+  };
+
+  // ==========================
+  // Delete Fee Structure
+  // ==========================
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/admin/fee-structure/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success(data.message);
+        feeList();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to delete fee structure");
+    }
+  };
+
+  return (
+    <FeeContext.Provider
+      value={{
+        state,
+        handleChange,
+        handleMonthlyFeeChange,
+        handleSubmit,
+        feeList,
+        handleDelete,
+      }}
+    >
+      {children}
+    </FeeContext.Provider>
+  );
+};
