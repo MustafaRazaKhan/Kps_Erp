@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 import initialState from "../initialstate/transport.state";
 import transportReducer from "../reducer/transport.reducer";
@@ -51,6 +51,9 @@ export const TransportProvider = ({
       console.log(error);
     }
   };
+  useEffect(() => {
+    transportList();
+  }, []);
 
   // ========================================
   // CREATE TRANSPORT

@@ -1,12 +1,4 @@
 import { FeeState } from "../types/fee.type";
-// feeCategory: string;
-//   monthlyFee: [];
-
-//   admissionFee: string;
-//   annualFee: string;
-//   examinationFee: string;
-//   registrationFee: string;
-//   securityFee: string;
 
 const initialState: FeeState = {
   feeObj: {
@@ -25,6 +17,7 @@ const initialState: FeeState = {
   monthList: [],
 
   loading: false,
+  feeDetails: null,
 };
 
 export default initialState;

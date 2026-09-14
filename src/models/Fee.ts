@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const feeSchema = new mongoose.Schema(
   {
-    feeCategoryValue: {
+    feeGroup: {
       type: String,
       enum: ["PNC-KG", "I-V", "VI-VIII", "IX-XII"],
       required: true,
@@ -23,7 +23,7 @@ const feeSchema = new mongoose.Schema(
       default: 0,
     },
 
-    monthList: [],
+    monthFeeList: [],
     registrationFee: {
       type: Number,
       default: 0,

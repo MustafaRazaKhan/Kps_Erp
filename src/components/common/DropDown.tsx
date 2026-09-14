@@ -20,10 +20,7 @@ export default function Dropdown({ isNavbar }: { isNavbar: boolean }) {
   // 🔐 Not Logged In
   if (!session) {
     return (
-      <Link
-        href="/login"
-        className="px-4 py-2 rounded secondary-bg text-white text-sm"
-      >
+      <Link href="/login" className="px-4 py-2 rounded secondary-bg  text-sm">
         Login
       </Link>
     );

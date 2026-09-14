@@ -38,7 +38,7 @@ export default function Topbar() {
 
           <div className="hidden sm:block leading-tight">
             <h1 className="text-sm font-semibold text-slate-900">Kps School</h1>
-            <p className="text-xs text-slate-500">Control Center</p>
+            <p className="text-xs text-slate-500">Cont Center</p>
           </div>
         </div>
 

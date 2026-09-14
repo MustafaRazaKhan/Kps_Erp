@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransport } from "@/store/admin/context/transport.context";
+import Link from "next/link";
 import React, { useEffect } from "react";
 
 const TransPortList = () => {
@@ -9,8 +10,6 @@ const TransPortList = () => {
   useEffect(() => {
     transportList();
   }, []);
-
-  console.log(state.transportList);
 
   return (
     <div className="w-full">
@@ -155,25 +154,18 @@ const TransPortList = () => {
                     {/* ACTION */}
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center gap-2">
-                        <button
-                          type="button"
+                        <Link
+                          href={`/admin/transport/view-details/${transport._id}`}
                           className="rounded-md bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition hover:bg-blue-100"
                         >
-                          View
-                        </button>
+                          View Users
+                        </Link>
 
                         <button
                           type="button"
                           className="rounded-md bg-pink-50 px-3 py-1.5 text-xs font-medium text-pink-600 transition hover:bg-pink-100"
                         >
                           Edit
-                        </button>
-
-                        <button
-                          type="button"
-                          className="rounded-md bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-100"
-                        >
-                          Delete
                         </button>
                       </div>
                     </td>

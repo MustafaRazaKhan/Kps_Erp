@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { FaList, FaMoneyBillWave, FaSchool } from "react-icons/fa";
+
 import Button from "@/components/common/Button";
 import FormContainer from "@/components/common/FormContainer";
 import InputField from "@/components/common/InputField";
@@ -7,52 +10,26 @@ import PageContent from "@/components/common/PageContent";
 import PageHeader from "@/components/common/PageHeader";
 import PageLayout from "@/components/common/PageLayout";
 import useFee from "@/store/admin/context/fee.context";
-import { useState } from "react";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
-import { FaList, FaMoneyBillWave, FaSchool, FaBus } from "react-icons/fa";
+const feeGroups = {
+  "PNC-KG": ["pnc", "nc", "kg"],
+  "I-V": ["i", "ii", "iii", "iv", "v"],
+  "VI-VIII": ["vi", "vii", "viii"],
+  "IX-XII": ["ix", "x", "xi", "xii"],
+} as const;
 
-/* ==========================================================
-   Page Heading Configuration
-========================================================== */
-
-const heading = {
+const pageHeading = {
   name: "Create Fee Structure",
   subHeading: "Create monthly and one-time fee structure.",
-  href: "/dashboard/admin/fee/fee-structure-list",
+  href: "/admin/fee/fee-list",
   btnHeading: "Fee Structure List",
-  icon: <FaList />,
+  icon: <FaIndianRupeeSign />,
 };
 
 const FeeCreate = () => {
-  /* ==========================================================
-      Fee Groups
-      Every school class belongs to one fee category.
-  ========================================================== */
-
-  const feeGroups = {
-    "PNC-KG": ["pnc", "nc", "kg"],
-    "I-V": ["i", "ii", "iii", "iv", "v"],
-    "VI-VIII": ["vi", "vii", "viii"],
-    "IX-XII": ["ix", "x", "xi", "xii"],
-  } as const;
-
-  type FeeCategory = keyof typeof feeGroups;
-
-  /* ==========================================================
-      Local UI State
-
-      feeCategoryValue -> Selected Fee Group
-      selectedClass    -> Selected Class
-  ========================================================== */
-
-  const [feeCategoryValue, setFeeCategoryValue] =
-    useState<FeeCategory>("PNC-KG");
-
+  const [feeGroup, setFeeGroup] = useState<keyof typeof feeGroups>("PNC-KG");
   const [selectedClass, setSelectedClass] = useState("");
-
-  /* ==========================================================
-      Fee Context
-  ========================================================== */
 
   const {
     state,
@@ -62,81 +39,38 @@ const FeeCreate = () => {
     handleChange,
   } = useFee();
 
+  const classes = feeGroups[feeGroup];
+
+  const handleGroupChange = (group: keyof typeof feeGroups) => {
+    setFeeGroup(group);
+    setSelectedClass("");
+  };
+
   return (
     <PageLayout>
-      <PageHeader heading={heading} />
+      <PageHeader heading={pageHeading} />
 
       <PageContent>
-        {/* ======================================================
-              Main Form
-        ====================================================== */}
-
         <FormContainer
           onSubmit={(e: React.SyntheticEvent<HTMLFormElement>) =>
-            handleSubmit(e, feeCategoryValue)
+            handleSubmit(e, feeGroup)
           }
         >
-          {/* ======================================================
-                STEP 1
-                Select Fee Group
-          ====================================================== */}
-
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-6 text-xl font-semibold text-gray-800">
-              Step 1 • Select Fee Group
+          {/* ==================== FEE GROUP ==================== */}
+          <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-5 text-xl font-semibold text-gray-800">
+              Select Fee Group
             </h2>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {Object.keys(feeGroups).map((category) => (
-                <label
-                  key={category}
-                  className={`cursor-pointer rounded-xl border p-4 transition-all ${
-                    feeCategoryValue === category
-                      ? "border-rose-500 bg-rose-50"
-                      : "border-gray-200 hover:border-rose-400"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      name="feeCategory"
-                      value={category}
-                      checked={feeCategoryValue === category}
-                      onChange={(e) => {
-                        setFeeCategoryValue(e.target.value as FeeCategory);
+              {Object.keys(feeGroups).map((group) => {
+                const currentGroup = group as keyof typeof feeGroups;
 
-                        // Reset selected class whenever group changes
-                        setSelectedClass("");
-                      }}
-                      className="h-5 w-5 accent-rose-500 uppercase"
-                    />
-
-                    <span className="font-medium text-gray-700">
-                      {category}
-                    </span>
-                  </div>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* ======================================================
-                STEP 2
-                Select Class
-          ====================================================== */}
-
-          {feeCategoryValue && (
-            <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-6 text-xl font-semibold text-gray-800">
-                Step 2 • Select Class
-              </h2>
-
-              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-                {feeGroups[feeCategoryValue].map((cls) => (
+                return (
                   <label
-                    key={cls}
-                    className={`cursor-pointer rounded-xl border p-4 transition-all uppercase ${
-                      selectedClass === cls
+                    key={group}
+                    className={`cursor-pointer rounded-xl border p-4 transition ${
+                      feeGroup === currentGroup
                         ? "border-rose-500 bg-rose-50"
                         : "border-gray-200 hover:border-rose-400"
                     }`}
@@ -144,187 +78,282 @@ const FeeCreate = () => {
                     <div className="flex items-center gap-3">
                       <input
                         type="radio"
-                        name="className"
-                        value={cls}
-                        checked={selectedClass === cls}
-                        onChange={(e) => setSelectedClass(e.target.value)}
+                        name="feeGroup"
+                        value={group}
+                        checked={feeGroup === currentGroup}
+                        onChange={() => handleGroupChange(currentGroup)}
                         className="h-5 w-5 accent-rose-500"
                       />
 
-                      <span className="font-medium">{cls}</span>
+                      <span className="font-medium text-gray-700">{group}</span>
                     </div>
                   </label>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          )}
+          </section>
 
-          {/* ======================================================
-                STEP 3
-                Monthly Fee For Selected Class
+          {/* ==================== CLASS ==================== */}
+          <section className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h2 className="mb-5 text-xl font-semibold text-gray-800">
+              Select Class
+            </h2>
 
-                Example:
-                Group  : PNC-KG
-                Class  : NC
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+              {classes.map((className) => (
+                <label
+                  key={className}
+                  className={`cursor-pointer rounded-xl border p-4 transition ${
+                    selectedClass === className
+                      ? "border-rose-500 bg-rose-50"
+                      : "border-gray-200 hover:border-rose-400"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      name="class"
+                      value={className}
+                      checked={selectedClass === className}
+                      onChange={() => setSelectedClass(className)}
+                      className="h-5 w-5 accent-rose-500"
+                    />
 
-                Add:
-                - Monthly Fee
-                - Bus Fee
+                    <span className="font-medium uppercase text-gray-700">
+                      {className}
+                    </span>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </section>
 
-                Click "Add Fee"
-
-                This creates one object and pushes it into
-                state.monthList
-
-                Example monthList
-
-                [
-                  {
-                    className:"NC",
-                    monthFee:1500,
-                    busFee:500
-                  }
-                ]
-          ====================================================== */}
-
+          {/* ==================== MONTHLY FEE ==================== */}
           {selectedClass && (
-            <div className="mt-8 rounded-2xl border border-rose-100 bg-white p-8 shadow-sm">
-              <div className="mb-8 border-b border-gray-200 pb-4">
+            <section className="mt-6 rounded-2xl border border-rose-100 bg-white p-6 shadow-sm">
+              <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-800">
-                  Monthly Fee Details
+                  Monthly Fee
                 </h2>
 
-                <p className="mt-1 text-gray-500">
-                  {feeCategoryValue} /
-                  <span className="font-semibold uppercase">
-                    {" "}
+                <p className="mt-1 text-sm text-gray-500">
+                  {feeGroup} /{" "}
+                  <span className="font-semibold uppercase text-gray-700">
                     {selectedClass}
                   </span>
                 </p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-5 md:grid-cols-2">
                 {/* Monthly Fee */}
-
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="monthFee"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Monthly Fee
                   </label>
 
                   <input
-                    value={state.monthlyObj.monthFee}
-                    onChange={handleMonthlyFeeChange}
+                    id="monthFee"
                     name="monthFee"
                     type="number"
-                    placeholder="₹ Enter Monthly Fee"
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-lg outline-none transition focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
+                    min="0"
+                    value={state.monthlyObj.monthFee}
+                    onChange={handleMonthlyFeeChange}
+                    placeholder="Enter Monthly Fee"
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
                   />
                 </div>
 
                 {/* Bus Fee */}
-
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="busFee"
+                    className="mb-2 block text-sm font-medium text-gray-700"
+                  >
                     Bus Fee
                   </label>
 
                   <input
-                    value={state.monthlyObj.busFee}
-                    onChange={handleMonthlyFeeChange}
+                    id="busFee"
                     name="busFee"
                     type="number"
-                    placeholder="₹ Enter Bus Fee"
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-lg outline-none transition focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
+                    min="0"
+                    value={state.monthlyObj.busFee}
+                    onChange={handleMonthlyFeeChange}
+                    placeholder="Enter Bus Fee"
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-rose-500 focus:ring-4 focus:ring-rose-100"
                   />
                 </div>
               </div>
 
-              {/* Add Monthly Fee Object */}
-
               <button
-                className="my-4 rounded bg-red-500 px-8 py-2.5 text-white"
+                type="button"
                 onClick={(e) => handleMonthSubmit(e, selectedClass)}
+                className="mt-5 rounded-xl bg-rose-500 px-8 py-3 font-medium text-white transition hover:bg-rose-600"
               >
-                Add Fee
+                Add Class Fee
               </button>
-            </div>
+            </section>
           )}
 
-          {/* ======================================================
-                STEP 4
-                Common Fees
+          {/* ==================== ADDED MONTHLY FEES ==================== */}
+          {state?.monthList?.length > 0 && (
+            <section className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+              {/* Header */}
+              <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Added Monthly Fees
+                  </h2>
 
-                These fees are common for the entire fee group.
+                  <p className="mt-1 text-sm text-gray-500">
+                    Review the monthly fees added for each class.
+                  </p>
+                </div>
 
-                Examples:
-                Admission Fee
-                Registration Fee
-                Annual Fee
-                Exam Fee
-                Security Fee
-          ====================================================== */}
+                <span className="w-fit rounded-full bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600">
+                  {state.monthList.length}{" "}
+                  {state.monthList.length === 1 ? "Class" : "Classes"}
+                </span>
+              </div>
 
-          <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h3 className="mb-6 text-xl font-semibold text-gray-800">
-              Fee Details
-            </h3>
+              {/* Fee Cards */}
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {state.monthList.map((fee, index) => {
+                  const monthlyFee = Number(fee.monthFee) || 0;
+                  const busFee = Number(fee.busFee) || 0;
+                  const total = monthlyFee + busFee;
+
+                  return (
+                    <div
+                      key={`${fee.selectedClass}-${index}`}
+                      className="rounded-2xl border border-gray-200 bg-gray-50 p-5 transition hover:border-rose-200 hover:bg-white hover:shadow-md"
+                    >
+                      {/* Card Header */}
+                      <div className="mb-5 flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                            Class
+                          </p>
+
+                          <h3 className="mt-1 text-xl font-bold uppercase text-gray-800">
+                            {fee.selectedClass}
+                          </h3>
+                        </div>
+
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-100 text-sm font-bold text-rose-600">
+                          {index + 1}
+                        </div>
+                      </div>
+
+                      {/* Fee Details */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3">
+                          <span className="text-sm text-gray-500">
+                            Monthly Fee
+                          </span>
+
+                          <span className="font-semibold text-gray-800">
+                            ₹{monthlyFee.toLocaleString("en-IN")}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3">
+                          <span className="text-sm text-gray-500">Bus Fee</span>
+
+                          <span className="font-semibold text-gray-800">
+                            ₹{busFee.toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Total */}
+                      <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4">
+                        <span className="text-sm font-medium text-gray-500">
+                          Total Monthly
+                        </span>
+
+                        <span className="text-lg font-bold text-rose-600">
+                          ₹{total.toLocaleString("en-IN")}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* ==================== OTHER FEES ==================== */}
+          <section className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Other Fees
+              </h2>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Add one-time fees for this fee structure.
+              </p>
+            </div>
 
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               <InputField
-                value={state.feeObj.admissionFee}
-                onChange={(e) => handleChange(e)}
                 name="admissionFee"
                 label="Admission Fee"
                 icon={<FaMoneyBillWave />}
                 type="number"
                 placeholder="Enter Admission Fee"
+                value={state.feeObj.admissionFee}
+                onChange={handleChange}
               />
+
               <InputField
-                value={state.feeObj.registrationFee}
-                onChange={(e) => handleChange(e)}
                 name="registrationFee"
                 label="Registration Fee"
                 icon={<FaMoneyBillWave />}
                 type="number"
                 placeholder="Enter Registration Fee"
+                value={state.feeObj.registrationFee}
+                onChange={handleChange}
               />
+
               <InputField
-                value={state.feeObj.annualFee}
-                onChange={(e) => handleChange(e)}
                 name="annualFee"
                 label="Annual Fee"
                 icon={<FaMoneyBillWave />}
                 type="number"
                 placeholder="Enter Annual Fee"
+                value={state.feeObj.annualFee}
+                onChange={handleChange}
               />
+
               <InputField
-                value={state.feeObj.examinationFee}
-                onChange={(e) => handleChange(e)}
                 name="examinationFee"
                 label="Examination Fee"
                 icon={<FaSchool />}
                 type="number"
                 placeholder="Enter Examination Fee"
+                value={state.feeObj.examinationFee}
+                onChange={handleChange}
               />
 
               <InputField
-                value={state.feeObj.securityFee}
-                onChange={(e) => handleChange(e)}
                 name="securityFee"
                 label="Security Fee"
                 icon={<FaMoneyBillWave />}
                 type="number"
                 placeholder="Enter Security Fee"
+                value={state.feeObj.securityFee}
+                onChange={handleChange}
               />
             </div>
-          </div>
+          </section>
 
-          {/* ======================================================
-                Final Save Button
-          ====================================================== */}
-
-          <div className="mt-8">
-            <Button />
+          {/* ==================== SAVE ==================== */}
+          <div className="mt-6">
+            <Button title="Create Fee" />
           </div>
         </FormContainer>
       </PageContent>

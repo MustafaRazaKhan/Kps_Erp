@@ -10,31 +10,40 @@ export const POST = async (req: Request) => {
     await connectDB();
 
     const body = await req.json();
-    console.log(body);
+    console.log(body, "feeBody");
 
     // Check duplicate
-    // const existing = await FeeStructure.findOne({ feeGroup });
+    const existingFeeGroup = await Fee.findOne({ feeGroup: body.feeGroup });
 
-    // if (existing) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message: "Fee Structure already exists.",
-    //     },
-    //     { status: 400 },
-    //   );
-    // }
+    if (existingFeeGroup) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Fee Structure already exists.",
+        },
+        { status: 400 },
+      );
+    }
 
-    const fee = await Fee.create(body);
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Fee Structure created successfully.",
-        // data: feeStructure,
-      },
-      { status: 201 },
-    );
+    const fee = await Fee.create({
+      feeGroup: body.feeGroup,
+      admissionFee: Number(body.admissionFee),
+      annualFee: Number(body.annualFee),
+      examinationFee: Number(body.examinationFee),
+      registrationFee: Number(body.registrationFee),
+      securityFee: Number(body.securityFee),
+      monthFeeList: body.monthList,
+    });
+    if (fee) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Fee Structure created successfully.",
+          // data: feeStructure,
+        },
+        { status: 201 },
+      );
+    }
   } catch (error) {
     console.error(error);
 
@@ -55,41 +64,7 @@ export const POST = async (req: Request) => {
 /**
  * Get Single Fee Structure
  */
-// export const getFeeStructureById = async (id) => {
-//   try {
-//     await connectDB();
-
-//     const feeStructure = await FeeStructure.findById(id);
-
-//     if (!feeStructure) {
-//       return NextResponse.json(
-//         {
-//           success: false,
-//           message: "Fee Structure not found.",
-//         },
-//         { status: 404 },
-//       );
-//     }
-
-//     return NextResponse.json(
-//       {
-//         success: true,
-//         data: feeStructure,
-//       },
-//       { status: 200 },
-//     );
-//   } catch (error) {
-//     console.error(error);
-
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "Internal Server Error.",
-//       },
-//       { status: 500 },
-//     );
-//   }
-// };
+//
 
 /**
  * Update Fee Structure

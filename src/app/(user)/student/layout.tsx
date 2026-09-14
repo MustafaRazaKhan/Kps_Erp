@@ -5,6 +5,7 @@ import useTheme from "@/store/admin/context/theme.context";
 import useSidebar from "@/store/common/context/toggle.sidebar.context";
 import React from "react";
 import { FaBook, FaRupeeSign } from "react-icons/fa";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 import { MdDashboard } from "react-icons/md";
 const navData = [
   {
@@ -30,6 +31,12 @@ const navData = [
     name: "Book Issue",
     link: "/student/add-new-book-issued",
     icon: <FaBook size={18} />,
+  },
+  {
+    id: 29,
+    name: "Fee List",
+    link: "/student/view-fee-list",
+    icon: <FaIndianRupeeSign size={18} />,
   },
 ];
 

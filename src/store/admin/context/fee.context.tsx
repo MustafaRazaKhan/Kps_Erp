@@ -7,6 +7,7 @@ import { FeeContextType } from "../types/fee.type";
 import feeReducer from "../reducer/fee.reducer";
 import initialState from "../initialstate/fee.state";
 import apiPOST from "@/services/api";
+import { showToastSuccess } from "@/utils/Toast";
 
 const FeeContext = createContext<FeeContextType | null>(null);
 
@@ -38,40 +39,58 @@ const FeeProvider = ({ children }: { children: React.ReactNode }) => {
       },
     });
   };
-  const handleMonthSubmit = (e: any, selectedClass: any) => {
+  const handleMonthSubmit = (
+    e: React.SyntheticEvent,
+    selectedClass: string,
+  ) => {
     e.preventDefault();
+
+    const existingClass = state.monthList.filter(
+      (item) => item.selectedClass === selectedClass,
+    );
+
+    if (existingClass.length > 0) {
+      alert("This class has already been added.");
+      return;
+    }
 
     const newObj = {
       selectedClass,
-      monthFee: Number(state.monthlyObj.monthFee),
-      busFee: Number(state.monthlyObj.busFee),
+      monthFee: Number(state.monthlyObj.monthFee) || 0,
+      busFee: Number(state.monthlyObj.busFee) || 0,
     };
+
     dispatch({
       type: "HANDLE_MONTHLY_SUBMIT",
       payload: newObj,
     });
-    // console.log(state.monthList);
   };
 
   const handleSubmit = async (
     e: React.SyntheticEvent<HTMLFormElement>,
-    feeCategoryValue: any,
+    feeGroup: any,
   ) => {
     e.preventDefault();
     const newData = {
-      feeCategoryValue: feeCategoryValue,
+      feeGroup: feeGroup,
       ...state.feeObj,
       monthList: state.monthList,
     };
     console.log(newData);
     const data = await apiPOST("/api/fee/fee-create", newData);
-    console.log(data);
+    // console.log(data);
+    if (data.success) {
+      showToastSuccess(data.message);
+    }
   };
   const feeList = async () => {
     try {
       const res = await fetch("/api/fee/fee-list");
 
       const data = await res.json();
+      if (data.success) {
+        showToastSuccess(data.message);
+      }
 
       dispatch({
         type: "SET_FEE_LIST",
@@ -82,9 +101,35 @@ const FeeProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("Updated monthList:", state.monthList);
-  }, [state.monthList]);
+  // ==========================
+  // Get Fee Structure By ID
+  // ==========================
+  const feeDetails = async (id: string) => {
+    try {
+      if (!id) {
+        console.error("Fee ID is required");
+        return;
+      }
+
+      const res = await fetch(`/api/fee/view-fee-detail/${id}`);
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        console.error(data.message || "Fee Structure not found");
+        return;
+      }
+
+      dispatch({
+        type: "SET_FEE_DETAILS",
+        payload: data.data,
+      });
+
+      return data.data;
+    } catch (error) {
+      console.error("Fee Details Error:", error);
+    }
+  };
 
   return (
     <FeeContext.Provider
@@ -95,6 +140,7 @@ const FeeProvider = ({ children }: { children: React.ReactNode }) => {
         handleSubmit,
         feeList,
         handleMonthSubmit,
+        feeDetails,
       }}
     >
       {children}

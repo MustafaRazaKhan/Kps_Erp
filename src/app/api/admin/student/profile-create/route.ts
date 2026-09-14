@@ -159,6 +159,7 @@ export async function POST(req: Request) {
       const classFee = feeCategoryGroup.monthList.find(
         (item: any) => item.selectedClass === classData.name,
       );
+      console.log(classFee);
 
       console.log(classFee, "classFee");
       if (!classFee) {
@@ -178,11 +179,11 @@ export async function POST(req: Request) {
       // Bus Fee - 12 Months
       // ==============================
 
-      // if (studentData.busRoute) {
-      //   const busFee = Number(classFee.busFee || 0);
+      if (studentData.busRoute) {
+        const busFee = Number(classFee.busFee || 0);
 
-      //   totalBusFee = busFee * 12;
-      // }
+        totalBusFee = busFee * 12;
+      }
 
       // ==============================
       // One-Time Fees

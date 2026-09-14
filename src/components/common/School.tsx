@@ -16,62 +16,53 @@ const School = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="w-full">
       {state?.schoolList?.map((cur: any) => (
-        <div key={cur._id} className="flex justify-center">
-          {/* Top Gradient */}
+        <div
+          key={cur._id}
+          className="flex items-center gap-4 border-b border-slate-200 py-3"
+        >
+          {/* Logo */}
+          <div className="w-20 h-20 shrink-0 overflow-hidden rounded-md bg-white shadow-sm">
+            <img
+              src={`/api/photo/school-photo/${cur._id}`}
+              alt={cur.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-          <div className="p-2">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              {/* Logo */}
-              <div className="flex-shrink-0">
-                <div className="w-28 h-28 s border-blue-100 shadow-md overflow-hidden bg-white">
-                  <img
-                    src={`/api/photo/school-photo/${cur._id}`}
-                    alt={cur.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+          {/* School Details */}
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl md:text-2xl font-bold uppercase text-slate-800">
+              {cur.name}
+            </h1>
 
-              {/* School Information */}
-              <div className="flex-1 text-center md:text-left">
-                <h1 className="text-3xl md:text-4xl font-extrabold uppercase text-slate-800 tracking-wide">
-                  {cur.name}
-                </h1>
+            <p className="flex items-center gap-2 text-sm text-blue-800 mt-0.5">
+              <FaSchool />
+              Excellence • Discipline • Education
+            </p>
 
-                <p className="text-blue-900 font-medium mt-1 flex justify-center md:justify-start items-center gap-2">
-                  <FaSchool />
-                  Excellence • Discipline • Education
-                </p>
+            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-600">
+              <span className="flex items-center gap-1.5">
+                <FaIdBadge className="text-blue-500" />
+                <strong>Code:</strong> {cur.code}
+              </span>
 
-                <div className="grid sm:grid-cols-2 gap-4 mt-6 text-slate-700">
-                  <div className="flex items-center gap-3">
-                    <FaIdBadge className="text-blue-400 text-lg" />
-                    <span>
-                      <strong>Affiliation Code:</strong> {cur.code}
-                    </span>
-                  </div>
+              <span className="flex items-center gap-1.5">
+                <FaEnvelope className="text-blue-500" />
+                {cur.email}
+              </span>
 
-                  <div className="flex items-center gap-3">
-                    <FaEnvelope className="text-blue-600 text-lg" />
-                    <span>{cur.email}</span>
-                  </div>
+              <span className="flex items-center gap-1.5">
+                <FaPhoneAlt className="text-blue-500" />
+                {cur.contact}
+              </span>
 
-                  <div className="flex items-center gap-3">
-                    <FaPhoneAlt className="text-blue-600 text-lg" />
-                    <span>{cur.contact}</span>
-                  </div>
-
-                  <div className="flex items-start gap-3 sm:col-span-2">
-                    <FaMapMarkerAlt className="text-blue-600 text-lg mt-1" />
-                    <span>{cur.address}</span>
-                  </div>
-                </div>
-              </div>
+              <span className="flex items-center gap-1.5">
+                <FaMapMarkerAlt className="text-blue-500 shrink-0" />
+                {cur.address}
+              </span>
             </div>
-
-            {/* Bottom Information Bar */}
           </div>
         </div>
       ))}

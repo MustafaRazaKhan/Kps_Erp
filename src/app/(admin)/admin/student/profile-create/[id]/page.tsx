@@ -3,16 +3,7 @@
 import { useEffect, useState } from "react";
 
 // import { LayoutPanelTop } from "lucide-react";
-import {
-  FiUser,
-  FiBookOpen,
-  FiPhone,
-  FiUsers,
-  FiUpload,
-  FiHash,
-  FiCalendar,
-  FiShield,
-} from "react-icons/fi";
+import { FiUser, FiUpload, FiHash, FiCalendar, FiShield } from "react-icons/fi";
 import { useParams } from "next/navigation";
 import { useStudent } from "@/store/admin/context/student.context";
 import useClass from "@/store/admin/context/class.context";
@@ -20,21 +11,18 @@ import PageLayout from "@/components/common/PageLayout";
 import PageContent from "@/components/common/PageContent";
 import PageHeader from "@/components/common/PageHeader";
 import FormContainer from "@/components/common/FormContainer";
-import {
-  FaPadlet,
-  FaPersonArrowDownToLine,
-  FaPhotoFilm,
-} from "react-icons/fa6";
+import { FaPersonArrowDownToLine, FaPhotoFilm } from "react-icons/fa6";
 import InputField from "@/components/common/InputField";
 import Select from "@/components/common/Select";
 import Button from "@/components/common/Button";
 import SectionCard from "@/components/common/SectionCard";
 import Row from "@/components/common/Row";
 import { TbDetails } from "react-icons/tb";
-import { FaBook, FaBus, FaRupeeSign, FaSchool } from "react-icons/fa";
+import { FaBus, FaRupeeSign, FaSchool } from "react-icons/fa";
 import { PiStudent } from "react-icons/pi";
 import { RiParentFill } from "react-icons/ri";
 import { MdOutlinePermContactCalendar } from "react-icons/md";
+import { useTransport } from "@/store/admin/context/transport.context";
 
 /* ================= HEADING ================= */
 
@@ -50,6 +38,9 @@ const heading = {
 
 const ProfileCreate = () => {
   const [transport, setTransport] = useState("");
+  const {
+    state: { transportList },
+  } = useTransport();
   const {
     state: { studentObj },
     handleChange,
@@ -68,6 +59,7 @@ const ProfileCreate = () => {
   }, []);
 
   const formData = studentObj;
+  console.log(formData.feeGroup);
   // console.log(transport);
 
   return (
@@ -500,21 +492,60 @@ const ProfileCreate = () => {
             </Row>
 
             <Row>
-              {transport == "yes" && (
-                <div className="flex-1/2 mt-4">
-                  <strong>
-                    Please Selcet the Bus Id(No) <sup>*</sup>
-                  </strong>
-                  <select
-                    name="busRoute"
-                    className="w-full py-4 border border-gray-400 "
-                    onChange={handleChange}
-                  >
-                    <option value="1">Pnc</option>
-                    <option value="2">I</option>
-                    <option value="3">Vi</option>
-                    <option value="4">IX</option>
-                  </select>
+              {transport === "yes" && (
+                <div className="mt-5 w-full">
+                  <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+                    {/* Label */}
+                    <label
+                      htmlFor="busRoute"
+                      className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-800"
+                    >
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-500">
+                        🚌
+                      </span>
+
+                      <span>
+                        Select Bus
+                        <sup className="ml-1 text-red-500">*</sup>
+                      </span>
+                    </label>
+
+                    {/* Helper Text */}
+                    <p className="mb-3 text-xs text-gray-500">
+                      Select the bus number assigned to this student.
+                    </p>
+
+                    {/* Select */}
+                    <div className="relative">
+                      <select
+                        id="busRoute"
+                        name="busRoute"
+                        onChange={handleChange}
+                        defaultValue=""
+                        className="w-full appearance-none rounded-xl border border-gray-300 bg-gray-50 px-4 py-3.5 pr-10 text-sm font-medium text-gray-700 outline-none transition focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-100"
+                      >
+                        <option value="" disabled>
+                          Select Bus Number
+                        </option>
+
+                        {transportList.map((bus) => (
+                          <option key={bus._id} value={bus._id}>
+                            {bus.transportId} — {bus.registrationNumber}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Dropdown Arrow */}
+                      <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        ▼
+                      </div>
+                    </div>
+
+                    {/* Selected Bus Info */}
+                    <p className="mt-2 text-xs text-gray-400">
+                      Example: BUS-01 — UP25AB1234
+                    </p>
+                  </div>
                 </div>
               )}
             </Row>

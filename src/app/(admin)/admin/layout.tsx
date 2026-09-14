@@ -15,12 +15,16 @@ import {
   FaCertificate,
   FaBus,
   FaEnvelopeOpenText,
+  FaRupeeSign,
+  FaMoneyBillWave,
+  FaFileInvoiceDollar,
 } from "react-icons/fa";
 
 import { PiStudent, PiUserListBold } from "react-icons/pi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { LuCassetteTape } from "react-icons/lu";
 import { MdBusAlert, MdDashboard, MdEmojiTransportation } from "react-icons/md";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen } = useSidebar();
@@ -86,13 +90,13 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       id: 17,
       name: "Add Fee",
       link: "/admin/fee/fee-create",
-      icon: <PiUserListBold size={18} />,
+      icon: <FaMoneyBillWave size={18} />,
     },
     {
       id: 18,
       name: "Fee Structure List",
       link: "/admin/fee/fee-list",
-      icon: <PiUserListBold size={18} />,
+      icon: <FaFileInvoiceDollar size={18} />,
     },
     {
       id: 7,

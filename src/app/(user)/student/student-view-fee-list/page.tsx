@@ -7,9 +7,8 @@ import useFee from "@/store/admin/context/fee.context";
 import School from "@/components/common/School";
 import PageLayout from "@/components/common/PageLayout";
 import PageContent from "@/components/common/PageContent";
-import Link from "next/link";
 
-const FeeList = () => {
+const ViewFeeList = () => {
   const { state, feeList } = useFee();
 
   useEffect(() => {
@@ -63,6 +62,7 @@ const FeeList = () => {
                     </div>
                   </div>
                 </div>
+
                 {/* Content */}
                 <div className="space-y-5 p-4">
                   {/* One-Time Fees */}
@@ -243,10 +243,6 @@ const FeeList = () => {
                     </div>
                   </section>
                 </div>
-                {/* C:\Users\admin\Desktop\kps_erp\src\app\(admin)\admin\fee\view-fee-detail */}
-                <Link href={`/admin/fee/view-fee-detail/${item._id}`}>
-                  View Fee Details
-                </Link>
               </div>
             );
           })}
@@ -260,4 +256,4 @@ const FeeList = () => {
   );
 };
 
-export default FeeList;
+export default ViewFeeList;

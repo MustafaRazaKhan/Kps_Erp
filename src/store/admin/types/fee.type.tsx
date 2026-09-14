@@ -1,5 +1,27 @@
+import React from "react";
+
+export type FeeMonthlyItem = {
+  selectedClass?: string;
+  monthFee: string | number;
+  busFee: string | number;
+};
+
 export type FeeType = {
   _id?: string;
+
+  admissionFee: string | number;
+  annualFee: string | number;
+  examinationFee: string | number;
+  registrationFee: string | number;
+  securityFee: string | number;
+
+  feeCategoryValue?: string;
+  feeGroup?: string;
+
+  monthFeeList: FeeMonthlyItem[];
+};
+
+export type FeeState = {
   feeObj: {
     admissionFee: string;
     annualFee: string;
@@ -13,30 +35,29 @@ export type FeeType = {
     monthFee: string;
     busFee: string;
   };
-  monthList: [];
-  feeList: [];
-};
 
-export type FeeState = {
-  feeObj: FeeType["feeObj"];
-  monthlyObj: FeeType["monthlyObj"];
   feeList: FeeType[];
+
+  monthList: FeeMonthlyItem[];
+
+  // Single fee structure selected by MongoDB _id
+  feeDetails: FeeType | null;
+
   loading: boolean;
-  monthList: FeeType["monthlyObj"][];
 };
 
 export type FeeAction =
   | {
       type: "HANDLE_CHANGE";
       payload: {
-        name: any;
+        name: string;
         value: string;
       };
     }
   | {
       type: "HANDLE_MONTHLY_FEE";
       payload: {
-        name: any;
+        name: string;
         value: string;
       };
     }
@@ -45,11 +66,15 @@ export type FeeAction =
     }
   | {
       type: "HANDLE_MONTHLY_SUBMIT";
-      payload: any;
+      payload: FeeMonthlyItem;
     }
   | {
       type: "SET_FEE_LIST";
-      payload: any;
+      payload: FeeType[];
+    }
+  | {
+      type: "SET_FEE_DETAILS";
+      payload: FeeType;
     };
 
 export interface FeeContextType {
@@ -65,7 +90,11 @@ export interface FeeContextType {
     e: React.SyntheticEvent<HTMLFormElement>,
     feeCategoryValue: any,
   ) => Promise<void>;
-  handleMonthSubmit: (E: any, selectedClass: any) => void;
+
+  handleMonthSubmit: (e: React.SyntheticEvent, selectedClass: string) => void;
 
   feeList: () => Promise<void>;
+
+  // Get one fee structure by MongoDB _id
+  feeDetails: (id: string) => Promise<FeeType | undefined>;
 }
