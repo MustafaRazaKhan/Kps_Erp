@@ -81,6 +81,9 @@ const FeeProvider = ({ children }: { children: React.ReactNode }) => {
     // console.log(data);
     if (data.success) {
       showToastSuccess(data.message);
+      dispatch({
+        type: "RESET_MONTHLIST",
+      });
     }
   };
   const feeList = async () => {

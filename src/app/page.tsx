@@ -7,399 +7,413 @@ import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
 
 import {
-  FaGraduationCap,
-  FaBookOpen,
-  FaUsers,
-  FaSchool,
   FaArrowRight,
-  FaLaptopCode,
+  FaBookOpen,
+  FaCalendarAlt,
+  FaChalkboardTeacher,
+  FaGraduationCap,
+  FaPhoneAlt,
+  FaSchool,
+  FaUsers,
 } from "react-icons/fa";
 
-export default function Home() {
-  const features = [
-    {
-      icon: <FaGraduationCap size={28} />,
-      title: "Quality Education",
-      desc: "Experienced teachers with modern teaching methods.",
-    },
-    {
-      icon: <FaBookOpen size={28} />,
-      title: "CBSE Curriculum",
-      desc: "Strong academic foundation with practical learning.",
-    },
-    {
-      icon: <FaUsers size={28} />,
-      title: "Expert Faculty",
-      desc: "Dedicated teachers helping every child succeed.",
-    },
-    {
-      icon: <FaSchool size={28} />,
-      title: "Modern Campus",
-      desc: "Smart classrooms, labs and library.",
-    },
-    {
-      icon: <FaLaptopCode size={28} />,
-      title: "Digital Learning",
-      desc: "Technology-enabled education for future leaders.",
-    },
-    {
-      icon: <FaGraduationCap size={28} />,
-      title: "Overall Development",
-      desc: "Sports, arts, leadership and personality growth.",
-    },
-  ];
+const quickLinks = [
+  {
+    title: "Admissions",
+    description: "Apply for admission and check admission information.",
+    icon: <FaGraduationCap />,
+    href: "/admission",
+  },
+  {
+    title: "Academic",
+    description: "Explore classes, curriculum and academic information.",
+    icon: <FaBookOpen />,
+    href: "/academic",
+  },
+  {
+    title: "Faculty",
+    description: "Meet our teachers and experienced academic team.",
+    icon: <FaChalkboardTeacher />,
+    href: "/faculty",
+  },
+  {
+    title: "Contact School",
+    description: "Get in touch with the school administration.",
+    icon: <FaPhoneAlt />,
+    href: "/contact",
+  },
+];
 
+const facilities = [
+  "Smart Classrooms",
+  "Science Laboratories",
+  "Computer Laboratory",
+  "Library",
+  "Sports Facilities",
+  "School Transport",
+];
+
+export default function Home() {
   return (
     <>
       <Navbar />
 
-      {/* HERO */}
+      <main className="bg-white text-slate-800">
+        {/* =====================================================
+            HERO
+        ===================================================== */}
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-white via-pink-50 to-white">
-        <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-pink-200 blur-[130px]" />
+        <section className="border-b border-slate-200 bg-slate-50">
+          <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:py-20">
+            {/* LEFT */}
 
-        <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-pink-100 blur-[150px]" />
+            <div>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-pink-200 bg-pink-50 px-4 py-2 text-sm font-medium text-pink-600">
+                <span className="h-2 w-2 rounded-full bg-pink-500" />
+                Admissions Open 2026–27
+              </div>
 
-        <div className="mx-auto grid min-h-[88vh] max-w-7xl items-center gap-14 px-6 py-20 lg:grid-cols-2">
-          <div>
-            <span
-              className="rounded-full px-4 py-2 text-sm font-semibold text-white"
-              style={{ background: "#ff0066" }}
-            >
-              Admissions Open 2026-27
-            </span>
+              <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+                Education that builds a{" "}
+                <span className="text-pink-600">better future.</span>
+              </h1>
 
-            <h1 className="mt-8 text-5xl font-black leading-tight text-slate-900 lg:text-7xl">
-              Building
-              <span style={{ color: "#ff0066" }}> Future </span>
-              Leaders Through Education.
-            </h1>
+              <p className="mt-6 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
+                Welcome to Rose Valley Public School. We provide a structured,
+                supportive and modern learning environment focused on academic
+                excellence and the overall development of every student.
+              </p>
 
-            <p className="mt-8 max-w-xl text-lg leading-8 text-slate-600">
-              Rose Valley Public School provides world-class education,
-              experienced faculty, modern classrooms and holistic development
-              that prepares every student for tomorrow.
-            </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/admission"
+                  className="inline-flex items-center gap-2 rounded-lg bg-pink-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-pink-700"
+                >
+                  Apply for Admission
+                  <FaArrowRight size={12} />
+                </Link>
 
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link
-                href="/admission"
-                className="rounded-xl px-7 py-4 font-semibold text-white transition hover:scale-105"
-                style={{ background: "#ff0066" }}
-              >
-                Apply Now
-              </Link>
+                <Link
+                  href="/about"
+                  className="rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-pink-300 hover:bg-pink-50 hover:text-pink-600"
+                >
+                  About School
+                </Link>
+              </div>
+
+              {/* BASIC SCHOOL INFO */}
+
+              <div className="mt-10 grid max-w-lg grid-cols-3 border-y border-slate-200 py-5">
+                <div>
+                  <p className="text-2xl font-bold text-slate-900">1200+</p>
+                  <p className="mt-1 text-xs text-slate-500">Students</p>
+                </div>
+
+                <div className="border-l border-slate-200 pl-5">
+                  <p className="text-2xl font-bold text-slate-900">60+</p>
+                  <p className="mt-1 text-xs text-slate-500">Teachers</p>
+                </div>
+
+                <div className="border-l border-slate-200 pl-5">
+                  <p className="text-2xl font-bold text-slate-900">30+</p>
+                  <p className="mt-1 text-xs text-slate-500">Years</p>
+                </div>
+              </div>
+            </div>
+
+            {/* IMAGE */}
+
+            <div className="relative">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+                <Image
+                  src="/hero.jpg"
+                  alt="Rose Valley Public School"
+                  width={800}
+                  height={650}
+                  priority
+                  className="h-[420px] w-full rounded-xl object-cover lg:h-[500px]"
+                />
+              </div>
+
+              <div className="absolute -bottom-5 left-5 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-lg">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                  School Board
+                </p>
+
+                <p className="mt-1 text-lg font-bold text-pink-600">CBSE</p>
+              </div>
+
+              <div className="absolute -right-3 top-8 rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-lg">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                  Academic Result
+                </p>
+
+                <p className="mt-1 text-lg font-bold text-slate-900">100%</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            QUICK ACCESS
+        ===================================================== */}
+
+        <section className="border-b border-slate-200 py-16">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-8">
+              <p className="text-sm font-semibold uppercase tracking-wider text-pink-600">
+                Quick Access
+              </p>
+
+              <h2 className="mt-2 text-2xl font-bold text-slate-900">
+                School Information
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-500">
+                Access important school information quickly.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {quickLinks.map((item) => (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className="group rounded-xl border border-slate-200 bg-white p-5 transition hover:border-pink-200 hover:bg-pink-50/40"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-pink-50 text-pink-600">
+                      {item.icon}
+                    </div>
+
+                    <FaArrowRight
+                      className="text-slate-300 transition group-hover:translate-x-1 group-hover:text-pink-500"
+                      size={13}
+                    />
+                  </div>
+
+                  <h3 className="mt-5 font-semibold text-slate-900">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    {item.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            ABOUT
+        ===================================================== */}
+
+        <section className="bg-slate-50 py-16">
+          <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-2">
+              <Image
+                src="/about-school.jpg"
+                alt="About Rose Valley Public School"
+                width={700}
+                height={550}
+                className="h-[380px] w-full rounded-xl object-cover"
+              />
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wider text-pink-600">
+                About Our School
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold leading-tight text-slate-900">
+                A focused environment for learning and growth.
+              </h2>
+
+              <p className="mt-5 leading-7 text-slate-600">
+                Rose Valley Public School is committed to providing quality
+                education in a safe, disciplined and encouraging environment.
+                Our academic approach combines strong fundamentals with
+                practical learning, technology and extracurricular activities.
+              </p>
+
+              <div className="mt-7 grid gap-3 sm:grid-cols-2">
+                {[
+                  "Experienced Faculty",
+                  "Smart Classrooms",
+                  "Modern Laboratories",
+                  "Digital Library",
+                  "Sports Facilities",
+                  "Safe Transport",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700"
+                  >
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-pink-50 text-xs text-pink-600">
+                      ✓
+                    </span>
+
+                    {item}
+                  </div>
+                ))}
+              </div>
 
               <Link
                 href="/about"
-                className="rounded-xl border border-slate-300 px-7 py-4 font-semibold hover:bg-slate-100"
+                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-pink-600 hover:text-pink-700"
               >
-                Explore School
+                Learn more about our school
+                <FaArrowRight size={11} />
               </Link>
             </div>
+          </div>
+        </section>
 
-            <div className="mt-14 grid grid-cols-3 gap-5">
-              <div className="rounded-2xl bg-white p-6 shadow-lg">
-                <h2
-                  className="text-3xl font-black"
-                  style={{ color: "#ff0066" }}
-                >
-                  1200+
+        {/* =====================================================
+            FACILITIES
+        ===================================================== */}
+
+        <section className="py-16">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-wider text-pink-600">
+                  Facilities
+                </p>
+
+                <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                  Built for better learning
                 </h2>
-
-                <p className="mt-2 text-sm text-slate-500">Students</p>
               </div>
 
-              <div className="rounded-2xl bg-white p-6 shadow-lg">
-                <h2
-                  className="text-3xl font-black"
-                  style={{ color: "#ff0066" }}
-                >
-                  60+
-                </h2>
-
-                <p className="mt-2 text-sm text-slate-500">Teachers</p>
-              </div>
-
-              <div className="rounded-2xl bg-white p-6 shadow-lg">
-                <h2
-                  className="text-3xl font-black"
-                  style={{ color: "#ff0066" }}
-                >
-                  30+
-                </h2>
-
-                <p className="mt-2 text-sm text-slate-500">Years</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative">
-            <img
-              src="./hero.jpg"
-              alt="School"
-              width={700}
-              height={700}
-              className="rounded-[40px] shadow-2xl"
-            />
-
-            <div className="absolute -bottom-6 -left-6 rounded-3xl bg-white p-5 shadow-xl">
-              <h3 className="text-3xl font-black" style={{ color: "#ff0066" }}>
-                100%
-              </h3>
-
-              <p className="text-sm text-slate-500">Board Result</p>
+              <p className="max-w-md text-sm leading-6 text-slate-500">
+                Our facilities support academics, creativity, physical
+                development and everyday student life.
+              </p>
             </div>
 
-            <div className="absolute -top-6 -right-6 rounded-3xl bg-white p-5 shadow-xl">
-              <h3 className="text-3xl font-black" style={{ color: "#ff0066" }}>
-                CBSE
-              </h3>
-
-              <p className="text-sm text-slate-500">Affiliated</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY CHOOSE US */}
-
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center">
-            <h2 className="text-4xl font-black text-slate-900">
-              Why Choose Us
-            </h2>
-
-            <p className="mx-auto mt-4 max-w-2xl text-slate-500">
-              We provide an inspiring environment where every child learns,
-              grows and succeeds.
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((item, index) => (
-              <div
-                key={index}
-                className="group rounded-3xl border border-slate-200 bg-white p-8 transition duration-500 hover:-translate-y-3 hover:shadow-2xl"
-              >
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {facilities.map((facility, index) => (
                 <div
-                  className="flex h-16 w-16 items-center justify-center rounded-2xl text-white transition group-hover:scale-110"
-                  style={{ background: "#ff0066" }}
+                  key={facility}
+                  className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-pink-200 hover:bg-pink-50/30"
                 >
-                  {item.icon}
-                </div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-pink-50 text-pink-600">
+                    {index === 0 && <FaSchool />}
+                    {index === 1 && <FaBookOpen />}
+                    {index === 2 && <FaLaptopIcon />}
+                    {index === 3 && <FaBookOpen />}
+                    {index === 4 && <FaUsers />}
+                    {index === 5 && <FaSchool />}
+                  </div>
 
-                <h3 className="mt-6 text-xl font-bold">{item.title}</h3>
+                  <div>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {facility}
+                    </h3>
 
-                <p className="mt-3 leading-7 text-slate-500">{item.desc}</p>
-
-                <button
-                  className="mt-6 flex items-center gap-2 font-semibold"
-                  style={{ color: "#ff0066" }}
-                >
-                  Learn More
-                  <FaArrowRight />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT SCHOOL */}
-
-      <section className="bg-pink-50 py-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2">
-          <div>
-            <Image
-              src="/about-school.jpg"
-              alt="About School"
-              width={700}
-              height={550}
-              className="rounded-[32px] shadow-xl"
-            />
-          </div>
-
-          <div>
-            <span
-              className="rounded-full px-4 py-2 text-sm font-semibold text-white"
-              style={{ background: "#ff0066" }}
-            >
-              About Our School
-            </span>
-
-            <h2 className="mt-6 text-4xl font-black text-slate-900">
-              Excellence in Education Since 1995
-            </h2>
-
-            <p className="mt-6 leading-8 text-slate-600">
-              Rose Valley Public School is committed to providing quality
-              education that nurtures knowledge, creativity and character. Our
-              experienced teachers and modern facilities create an environment
-              where every child can achieve their highest potential.
-            </p>
-
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              {[
-                "Smart Classrooms",
-                "Science Labs",
-                "Computer Labs",
-                "Digital Library",
-                "Sports Campus",
-                "Experienced Faculty",
-              ].map((item) => (
-                <div key={item} className="rounded-xl bg-white p-4 shadow-sm">
-                  <span
-                    className="mr-2 text-lg font-bold"
-                    style={{ color: "#ff0066" }}
-                  >
-                    ✓
-                  </span>
-
-                  {item}
+                    <p className="mt-1 text-xs text-slate-500">
+                      Available for students
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* STATISTICS */}
+        {/* =====================================================
+            SCHOOL INFORMATION
+        ===================================================== */}
 
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              ["1200+", "Students"],
-              ["60+", "Teachers"],
-              ["30+", "Years"],
-              ["100%", "Board Result"],
-            ].map(([number, title]) => (
-              <div
-                key={title}
-                className="rounded-3xl border bg-white p-10 text-center shadow-sm transition hover:-translate-y-2 hover:shadow-xl"
-              >
-                <h2
-                  className="text-5xl font-black"
-                  style={{ color: "#ff0066" }}
+        <section className="border-y border-slate-200 bg-slate-50 py-14">
+          <div className="mx-auto grid max-w-7xl gap-5 px-6 md:grid-cols-3">
+            <div className="rounded-xl border border-slate-200 bg-white p-6">
+              <FaCalendarAlt className="text-pink-600" size={20} />
+
+              <h3 className="mt-4 font-semibold text-slate-900">
+                Academic Session
+              </h3>
+
+              <p className="mt-1 text-sm text-slate-500">
+                2026–27 academic session is currently open.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-200 bg-white p-6">
+              <FaUsers className="text-pink-600" size={20} />
+
+              <h3 className="mt-4 font-semibold text-slate-900">
+                Student Community
+              </h3>
+
+              <p className="mt-1 text-sm text-slate-500">
+                A supportive learning environment for every student.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-slate-200 bg-white p-6">
+              <FaSchool className="text-pink-600" size={20} />
+
+              <h3 className="mt-4 font-semibold text-slate-900">
+                School Campus
+              </h3>
+
+              <p className="mt-1 text-sm text-slate-500">
+                Modern facilities designed for academics and activities.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            ADMISSION CTA
+        ===================================================== */}
+
+        <section className="py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="rounded-2xl bg-pink-600 px-7 py-12 text-center text-white sm:px-12">
+              <p className="text-sm font-semibold uppercase tracking-wider text-pink-100">
+                Admissions 2026–27
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
+                Start your child's journey with us.
+              </h2>
+
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-pink-100 sm:text-base">
+                Get admission information, speak with our team and take the next
+                step toward joining Rose Valley Public School.
+              </p>
+
+              <div className="mt-7 flex flex-wrap justify-center gap-3">
+                <Link
+                  href="/admission"
+                  className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-pink-600 transition hover:bg-pink-50"
                 >
-                  {number}
-                </h2>
+                  Apply Now
+                </Link>
 
-                <p className="mt-3 text-slate-500">{title}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FACILITIES */}
-
-      <section className="bg-slate-50 py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center">
-            <h2 className="text-4xl font-black">World-Class Facilities</h2>
-
-            <p className="mt-4 text-slate-500">
-              Everything students need for academic and personal growth.
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              "Digital Classrooms",
-              "Science Laboratory",
-              "Computer Laboratory",
-              "Library",
-              "Sports Complex",
-              "Transportation",
-            ].map((facility) => (
-              <div
-                key={facility}
-                className="rounded-3xl bg-white p-8 shadow-sm transition hover:-translate-y-2 hover:shadow-xl"
-              >
-                <div
-                  className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl text-3xl text-white"
-                  style={{ background: "#ff0066" }}
+                <Link
+                  href="/contact"
+                  className="rounded-lg border border-pink-300 px-6 py-3 text-sm font-semibold text-white transition hover:bg-pink-500"
                 >
-                  🏫
-                </div>
-
-                <h3 className="text-xl font-bold">{facility}</h3>
-
-                <p className="mt-3 text-slate-500">
-                  Modern infrastructure designed to enhance learning and
-                  development.
-                </p>
+                  Contact School
+                </Link>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* GALLERY */}
-
-      <section className="py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="text-center">
-            <h2 className="text-4xl font-black">Campus Gallery</h2>
-
-            <p className="mt-4 text-slate-500">
-              A glimpse of our vibrant school life.
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {[1, 2, 3, 4].map((item) => (
-              <Image
-                key={item}
-                src={`/gallery${item}.jpg`}
-                alt=""
-                width={400}
-                height={300}
-                className="h-72 w-full rounded-3xl object-cover transition duration-500 hover:scale-105"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ADMISSION CTA */}
-
-      <section
-        className="py-24 text-center text-white"
-        style={{
-          background: "linear-gradient(135deg,#ff0066,#ff4d94)",
-        }}
-      >
-        <div className="mx-auto max-w-4xl px-6">
-          <h2 className="text-5xl font-black">Admissions Open</h2>
-
-          <p className="mt-6 text-lg text-white/90">
-            Give your child the best learning experience with experienced
-            teachers, modern infrastructure and a caring environment.
-          </p>
-
-          <div className="mt-10 flex justify-center gap-5">
-            <Link
-              href="/admission"
-              className="rounded-xl bg-white px-8 py-4 font-semibold text-black transition hover:scale-105"
-            >
-              Apply Now
-            </Link>
-
-            <Link
-              href="/contact"
-              className="rounded-xl border border-white px-8 py-4 font-semibold transition hover:bg-white hover:text-black"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <Footer />
     </>
   );
+}
+
+/* Small reusable icon for the facilities section */
+
+function FaLaptopIcon() {
+  return <span className="text-sm">💻</span>;
 }

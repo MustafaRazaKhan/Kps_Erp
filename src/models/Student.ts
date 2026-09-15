@@ -2,6 +2,14 @@ import mongoose, { Schema } from "mongoose";
 
 const studentSchema = new Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    classId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ClassModel",
+    },
     srNo: {
       type: Number,
     },
@@ -81,14 +89,6 @@ const studentSchema = new Schema(
     subjectOffered: [],
     motherTongue: String,
     homeTown: String,
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    classId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ClassModel",
-    },
 
     totalMonthFee: {
       type: Number,
@@ -96,11 +96,9 @@ const studentSchema = new Schema(
     totalBusFee: {
       type: Number,
     },
-    totalFee: {
+    totalYearFee: {
       type: Number,
     },
-
-    notes: String,
 
     // ✅ SaaS way (use URL, not buffer)
     photo: {
@@ -108,6 +106,7 @@ const studentSchema = new Schema(
       imageType: { type: String, required: true },
       name: { type: String },
     },
+    notes: String,
 
     isActive: {
       type: Boolean,

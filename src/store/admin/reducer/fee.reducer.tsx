@@ -63,6 +63,11 @@ const feeReducer = (state: FeeState, action: FeeAction): FeeState => {
         ...state,
         loading: true,
       };
+    case "RESET_MONTHLIST":
+      return {
+        ...state,
+        monthList: [],
+      };
 
     default:
       return state;

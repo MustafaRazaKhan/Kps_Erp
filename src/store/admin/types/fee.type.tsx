@@ -75,6 +75,9 @@ export type FeeAction =
   | {
       type: "SET_FEE_DETAILS";
       payload: FeeType;
+    }
+  | {
+      type: "RESET_MONTHLIST";
     };
 
 export interface FeeContextType {

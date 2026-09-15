@@ -147,7 +147,7 @@ const AddNewFeeInstallMent = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 {/* Tuition Fee */}
                 <label
-                  className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition ${
+                  className={`flex items-center gap-3 rounded-xl border p-4 transition ${
                     feeTypes.tuition
                       ? "border-[#ff0066] bg-pink-50"
                       : "border-slate-200 bg-white"
@@ -171,7 +171,7 @@ const AddNewFeeInstallMent = () => {
 
                 {/* Transport Fee */}
                 <label
-                  className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition ${
+                  className={`flex  items-center gap-3 rounded-xl border p-4 transition ${
                     feeTypes.transport
                       ? "border-[#ff0066] bg-pink-50"
                       : "border-slate-200 bg-white"
@@ -207,7 +207,7 @@ const AddNewFeeInstallMent = () => {
                 {months.map((month) => (
                   <label
                     key={month}
-                    className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition ${
+                    className={`flex  items-center gap-3 rounded-xl border p-4 transition ${
                       selectedMonths.includes(month)
                         ? "border-[#ff0066] bg-pink-50"
                         : "border-slate-200 bg-white"

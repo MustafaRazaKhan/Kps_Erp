@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-// import { LayoutPanelTop } from "lucide-react";
 import { FiUser, FiUpload, FiHash, FiCalendar, FiShield } from "react-icons/fi";
 import { useParams } from "next/navigation";
 import { useStudent } from "@/store/admin/context/student.context";
@@ -59,7 +58,6 @@ const ProfileCreate = () => {
   }, []);
 
   const formData = studentObj;
-  console.log(formData.feeGroup);
   // console.log(transport);
 
   return (
@@ -435,7 +433,7 @@ const ProfileCreate = () => {
                   {/* YES */}
                   <label
                     htmlFor="transport-yes"
-                    className="flex flex-1/2 cursor-pointer items-center justify-between rounded-xl border border-gray-200 bg-white p-4 transition-all duration-200 hover:border-rose-400 hover:bg-rose-50"
+                    className="flex flex-1/2  items-center justify-between rounded-xl border border-gray-200 bg-white p-4 transition-all duration-200 hover:border-rose-400 hover:bg-rose-50"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50 text-green-600">
@@ -463,7 +461,7 @@ const ProfileCreate = () => {
                   {/* NO */}
                   <label
                     htmlFor="transport-no"
-                    className="flex flex-1/2 cursor-pointer items-center justify-between rounded-xl border border-gray-200 bg-white p-4 transition-all duration-200 hover:border-rose-400 hover:bg-rose-50"
+                    className="flex flex-1/2  items-center justify-between rounded-xl border border-gray-200 bg-white p-4 transition-all duration-200 hover:border-rose-400 hover:bg-rose-50"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
@@ -562,7 +560,7 @@ const ProfileCreate = () => {
                   </h2>
                 </div>
 
-                <label className="flex cursor-pointer flex-col items-center justify-center rounded border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
+                <label className="flex  flex-col items-center justify-center rounded border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center transition hover:border-slate-400 hover:bg-slate-100">
                   <FiUpload className="mb-3 text-slate-500" size={28} />
 
                   <p className="text-sm font-medium text-slate-700">

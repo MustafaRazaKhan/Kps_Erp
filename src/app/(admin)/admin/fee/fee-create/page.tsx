@@ -69,7 +69,7 @@ const FeeCreate = () => {
                 return (
                   <label
                     key={group}
-                    className={`cursor-pointer rounded-xl border p-4 transition ${
+                    className={` rounded-xl border p-4 transition ${
                       feeGroup === currentGroup
                         ? "border-rose-500 bg-rose-50"
                         : "border-gray-200 hover:border-rose-400"
@@ -103,7 +103,7 @@ const FeeCreate = () => {
               {classes.map((className) => (
                 <label
                   key={className}
-                  className={`cursor-pointer rounded-xl border p-4 transition ${
+                  className={` rounded-xl border p-4 transition ${
                     selectedClass === className
                       ? "border-rose-500 bg-rose-50"
                       : "border-gray-200 hover:border-rose-400"

@@ -7,12 +7,19 @@ import React from "react";
 import { FaBook, FaRupeeSign } from "react-icons/fa";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { MdDashboard } from "react-icons/md";
+import { ImProfile } from "react-icons/im";
 const navData = [
   {
     id: 0,
     name: "Dashboard",
-    link: "/admin/dashboard",
+    link: "/student/dashboard",
     icon: <MdDashboard size={18} />,
+  },
+  {
+    id: 10,
+    name: "Account/Profile",
+    link: "/student/student-view-profile",
+    icon: <ImProfile size={18} />,
   },
   {
     id: 1,

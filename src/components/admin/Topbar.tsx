@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-// import { useToggle } from "@/store/toggledashboard/Toggledashboard";
-import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-import { FiBell, FiSearch } from "react-icons/fi";
+import { FiBell, FiChevronDown } from "react-icons/fi";
+
 import { RiMenuFold3Fill, RiMenuUnfold3Fill } from "react-icons/ri";
+
 import useSidebar from "@/store/common/context/toggle.sidebar.context";
 import useTheme from "@/store/admin/context/theme.context";
 import Dropdown from "../common/DropDown";
@@ -14,77 +13,168 @@ import Dropdown from "../common/DropDown";
 export default function Topbar() {
   const { isSidebarOpen, handleSidebar } = useSidebar();
   const { theme, toggleTheme } = useTheme();
-  //   const { handleToggle,toggle } = useToggle();
+
   const { data: session } = useSession();
 
   const user = session?.user as any;
   const isAdmin = user?.role === "admin";
 
-  // close on outside click
-
   return (
-    <header className="w-full border-b border-gray-200 ">
-      <div className="flex  items-center justify-between px-4 md:px-6 py-2.5">
-        {/* LEFT */}
-        <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-40 w-full border-b border-amber-100/80 bg-[#fffdf7]/95 backdrop-blur">
+      <div className="flex min-h-[64px] items-center justify-between px-3 py-2.5 sm:px-5 lg:px-6">
+        {/* =====================================================
+            LEFT
+        ===================================================== */}
+
+        <div className="flex items-center gap-3">
+          {/* SIDEBAR BUTTON */}
+
           <button
+            type="button"
             onClick={handleSidebar}
-            className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 transition"
             title="Toggle Sidebar"
+            className="
+              flex h-9 w-9 items-center justify-center
+              rounded-xl
+              border border-amber-100
+              bg-amber-50/60
+              text-amber-700
+              transition-all duration-200
+              hover:bg-amber-100/70
+              hover:text-amber-800
+              focus:outline-none
+              focus:ring-2
+              focus:ring-amber-200
+            "
           >
-            {isSidebarOpen ? <RiMenuUnfold3Fill /> : <RiMenuFold3Fill />}
-            {/* {/* <FaBars className="text-slate-700" size={15} /> */}
+            {isSidebarOpen ? (
+              <RiMenuUnfold3Fill size={18} />
+            ) : (
+              <RiMenuFold3Fill size={18} />
+            )}
           </button>
 
-          <div className="hidden sm:block leading-tight">
-            <h1 className="text-sm font-semibold text-slate-900">Kps School</h1>
-            <p className="text-xs text-slate-500">Cont Center</p>
+          {/* SCHOOL TITLE */}
+
+          <div className="hidden leading-tight sm:block">
+            <p className="text-sm font-bold tracking-tight text-gray-900">
+              Krishna Public School
+            </p>
+
+            <div className="mt-0.5 flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/70" />
+
+              <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-gray-400">
+                Admin Center
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* SEARCH (soft SaaS style) */}
-        {/* <div className="hidden md:flex flex-1 max-w-xl mx-6">
-          <div className="relative w-full group">
+        {/* =====================================================
+            RIGHT
+        ===================================================== */}
 
-            <FiSearch
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-600"
-              size={18}
-            />
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* =================================================
+              THEME TOGGLE
+          ================================================== */}
 
-            <input
-              placeholder="Search students, classes..."
-              className="w-full rounded-2xl bg-slate-100/70 py-2.5 pl-11 pr-4 text-sm outline-none
-              focus:bg-white focus:ring-2 focus:ring-slate-200 transition"
-            />
+          <button
+            type="button"
+            onClick={toggleTheme}
+            title="Toggle Theme"
+            className={`
+              relative flex h-8 w-14 items-center
+              rounded-full border
+              transition-all duration-300
+              focus:outline-none
+              focus:ring-2
+              focus:ring-amber-200
 
-          </div>
-        </div> */}
+              ${
+                theme
+                  ? "border-slate-700 bg-slate-800"
+                  : "border-amber-200 bg-amber-50"
+              }
+            `}
+          >
+            {/* Track decoration */}
 
-        {/* RIGHT */}
-        <div className="flex items-center gap-3">
-          <div title="Toggle Mode">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className={`relative flex h-7 w-14 items-center rounded-full transition-all duration-300 border-2 border-gray-300 ${
-                theme ? "bg-slate-900" : "bg-white "
-              }`}
+            <span
+              className={`
+                absolute left-1.5 text-[9px] transition-opacity
+                ${theme ? "opacity-0" : "text-amber-700 opacity-100"}
+              `}
             >
-              <div
-                className={`h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-300 ${
-                  theme ? "translate-x-8" : "translate-x-1"
-                }`}
-              />
-            </button>
-          </div>
-          {/* NOTIFICATION */}
-          <button className="relative h-10 w-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 transition">
-            <FiBell className="text-slate-700" size={18} />
-            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500"></span>
+              ☀
+            </span>
+
+            <span
+              className={`
+                absolute right-1.5 text-[9px] transition-opacity
+                ${theme ? "text-slate-200 opacity-100" : "opacity-0"}
+              `}
+            >
+              ☾
+            </span>
+
+            {/* Toggle Circle */}
+
+            <span
+              className={`
+                relative z-10 flex h-5 w-5 items-center justify-center
+                rounded-full bg-white
+                shadow-sm
+                transition-transform duration-300
+
+                ${theme ? "translate-x-8" : "translate-x-1"}
+              `}
+            />
           </button>
 
-          {/* PROFILE */}
-          <Dropdown isNavbar={false} />
+          {/* =================================================
+              NOTIFICATION
+          ================================================== */}
+
+          <button
+            type="button"
+            title="Notifications"
+            className="
+              relative flex h-9 w-9 items-center justify-center
+              rounded-xl
+              border border-slate-200
+              bg-white/70
+              text-slate-500
+              transition-all duration-200
+              hover:border-amber-200
+              hover:bg-amber-50/60
+              hover:text-amber-700
+            "
+          >
+            <FiBell size={17} />
+
+            {/* Notification Dot */}
+
+            <span className="absolute right-2 top-1.5 h-1.5 w-1.5 rounded-full bg-red-400/80 ring-2 ring-white" />
+          </button>
+
+          {/* =================================================
+              PROFILE
+          ================================================== */}
+
+          <div
+            className="
+              rounded-xl
+              border border-amber-100/80
+              bg-white/60
+              transition
+              hover:border-amber-200
+              hover:bg-amber-50/40
+            "
+          >
+            <Dropdown isNavbar={false} />
+          </div>
         </div>
       </div>
     </header>

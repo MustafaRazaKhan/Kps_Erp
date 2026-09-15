@@ -13,366 +13,418 @@ import enquiry from "@/constants/tables/enquiry.columns";
 import useEnquiry from "@/store/common/context/enquiry.context";
 import useModal from "@/store/common/context/modal.context";
 
-import { BiPencil, BiQuestionMark } from "react-icons/bi";
+import { BiPencil } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
-import {
-  FaEnvelope,
-  FaEnvelopeOpenText,
-  FaPhone,
-  FaQuestionCircle,
-} from "react-icons/fa";
 
-/* ============================================================
-   PAGE HEADER CONFIGURATION
-   ------------------------------------------------------------
-   This object is passed to the common PageHeader component.
-   It controls:
-   - Page title
-   - Page description
-   - Add button text
-   - Add button URL
-   - Header icon
-============================================================ */
+import { FaEnvelope, FaEnvelopeOpenText, FaPhone } from "react-icons/fa";
 
 const heading = {
   name: "Enquiry List",
-  subHeading: "Add and manage your school’s basic Enquiries.",
+  subHeading:
+    "View, manage and follow up with enquiries received by the school.",
   href: "/dashboard/admin/school/school-list",
   btnHeading: "Add Enquiry",
   icon: <FaEnvelopeOpenText />,
 };
 
-/* ============================================================
-   ENQUIRY LIST COMPONENT
-============================================================ */
-
 const EnquiryList = () => {
-  /* ------------------------------------------------------------
-     ENQUIRY CONTEXT
-     ------------------------------------------------------------
-     state:
-       Contains enquiry list and other enquiry-related state.
-
-     handleUpdate:
-       Handles updating enquiry information/comment.
-
-     setComment:
-       Updates the comment entered inside the modal.
-
-     handleDelete:
-       Deletes an enquiry using its ID.
-  ------------------------------------------------------------ */
-
   const { state, handleUpdate, setComment, handleDelete } = useEnquiry();
-
-  /* ------------------------------------------------------------
-     MODAL CONTEXT
-     ------------------------------------------------------------
-     openModal:
-       Opens the modal and stores the selected enquiry ID.
-
-     updateId:
-       Contains the ID of the enquiry currently being edited.
-  ------------------------------------------------------------ */
 
   const { openModal, updateId } = useModal();
 
   return (
     <PageLayout>
-      {/* ========================================================
+      {/* =====================================================
           PAGE HEADER
-          --------------------------------------------------------
-          Displays the page title, description and Add Enquiry
-          button.
-      ======================================================== */}
+      ===================================================== */}
 
       <PageHeader heading={heading} />
 
-      {/* ========================================================
-          MAIN PAGE CONTENT
-      ======================================================== */}
-
       <PageContent>
+        {/* =====================================================
+            TABLE
+        ===================================================== */}
+
         {state.loading ? (
           <Loader />
         ) : (
-          <DataTable>
-            {/* ----------------------------------------------------
-              TABLE HEADER
-              ----------------------------------------------------
-              The columns are coming from:
-              @/constants/tables/enquiry.columns
-          ---------------------------------------------------- */}
+          <div className="overflow-hidden rounded-2xl border border-amber-100/80 bg-white shadow-sm">
+            {/* =================================================
+                TABLE TOP STRIP
+            ================================================== */}
 
-            <DataTableHeader columns={enquiry} />
+            <div className="border-b border-amber-100/70 bg-gradient-to-r from-[#fffdf7] via-[#fff9e8] to-blue-50/40 px-5 py-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-700">
+                    Admission Management
+                  </p>
 
-            {/* ====================================================
-              TABLE BODY
-          ==================================================== */}
+                  <h2 className="mt-1 text-base font-bold text-slate-800">
+                    School Enquiries
+                  </h2>
+                </div>
 
-            <tbody className="divide-y divide-slate-200 bg-white dark:divide-slate-800 dark:bg-slate-900">
-              {/* --------------------------------------------------
-                LOOP THROUGH ALL ENQUIRIES
+                <div className="rounded-xl border border-amber-100 bg-white/70 px-3 py-2">
+                  <p className="text-[10px] font-medium text-slate-400">
+                    Total Enquiries
+                  </p>
 
-                state.enquiryList contains the enquiries
-                retrieved from the database/API.
-            -------------------------------------------------- */}
+                  <p className="mt-0.5 text-lg font-bold text-slate-800">
+                    {state?.enquiryList?.length || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-              {state?.enquiryList?.map((item, index) => (
-                <tr
-                  key={item._id}
-                  className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/40"
-                >
-                  {/* ==================================================
-                    NAME COLUMN
-                    --------------------------------------------------
-                    Shows:
-                    - Student/person name
-                    - First letter as avatar
-                    - Generated enquiry number
-                ================================================== */}
+            <div className="overflow-x-auto">
+              <DataTable>
+                <DataTableHeader columns={enquiry} />
 
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      {/* ------------------------------------------------
-                        USER AVATAR
-                        Displays the first character of the name.
-                    ------------------------------------------------ */}
+                <tbody className="divide-y divide-slate-100 bg-white">
+                  {state?.enquiryList?.map((item, index) => {
+                    const status = item.status?.toString().toLowerCase() || "";
 
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-700 dark:bg-slate-700 dark:text-white">
-                        {item.name?.charAt(0)?.toUpperCase()}
-                      </div>
+                    const isCompleted =
+                      status.includes("complete") ||
+                      status.includes("closed") ||
+                      status.includes("done");
 
-                      {/* ------------------------------------------------
-                        NAME + ENQUIRY NUMBER
-                    ------------------------------------------------ */}
+                    const isPending =
+                      status.includes("pending") || status.includes("new");
 
-                      <div>
-                        <p className="font-medium text-slate-900 dark:text-white">
-                          {item.name}
-                        </p>
-
-                        {/* Generate enquiry number like:
-                          ENQ-0001
-                          ENQ-0002
-                          ENQ-0003
-                      */}
-
-                        <p className="text-xs text-slate-500">
-                          ENQ-{String(index + 1).padStart(4, "0")}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* ==================================================
-                    CONTACT COLUMN
-                    --------------------------------------------------
-                    Displays email and phone number.
-                ================================================== */}
-
-                  <td className="px-6 py-4">
-                    <div className="space-y-1 text-sm">
-                      {/* ------------------------------------------------
-                        EMAIL
-                    ------------------------------------------------ */}
-
-                      <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-                        <FaEnvelope className="text-slate-400" size={12} />
-
-                        <span className="max-w-[180px] truncate">
-                          {item.email}
-                        </span>
-                      </div>
-
-                      {/* ------------------------------------------------
-                        PHONE
-                    ------------------------------------------------ */}
-
-                      <div className="flex items-center gap-2 text-slate-500">
-                        <FaPhone className="text-slate-400" size={12} />
-
-                        {item.phone}
-                      </div>
-                    </div>
-                  </td>
-
-                  {/* ==================================================
-                    SUBJECT COLUMN
-                ================================================== */}
-
-                  <td className="px-6 py-4">
-                    <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                      {item.subject}
-                    </span>
-                  </td>
-
-                  {/* ==================================================
-                    MESSAGE COLUMN
-                    --------------------------------------------------
-                    Long messages are truncated to keep the table
-                    clean.
-                ================================================== */}
-
-                  <td className="max-w-70 px-6 py-4">
-                    <p className="truncate text-sm text-slate-600 dark:text-slate-400">
-                      {item.message}
-                    </p>
-                  </td>
-
-                  {/* ==================================================
-                    DATE COLUMN
-                    --------------------------------------------------
-                    Converts createdAt into Indian date format.
-
-                    Example:
-                    03/09/2026
-                ================================================== */}
-
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
-
-                      {new Date((item as any).createdAt).toLocaleDateString(
-                        "en-IN",
-                      )}
-                    </span>
-                  </td>
-
-                  {/* ==================================================
-                    STATUS COLUMN
-                    --------------------------------------------------
-                    Displays the current enquiry status.
-                ================================================== */}
-
-                  <td className="px-6 py-4 text-sm text-slate-500">
-                    {item.status}
-                  </td>
-
-                  {/* ==================================================
-                    COMMENT COLUMN
-                    --------------------------------------------------
-                    If an enquiry has a comment, display it.
-                    Otherwise display "-".
-                ================================================== */}
-
-                  <td className="px-6 py-4 text-sm text-slate-500">
-                    {item.comment ? item.comment : "-"}
-                  </td>
-
-                  {/* ==================================================
-                    ACTIONS COLUMN
-                    --------------------------------------------------
-                    Contains:
-                    - Edit button
-                    - Delete button
-                ================================================== */}
-
-                  <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-1">
-                      {/* ------------------------------------------------
-                        EDIT / COMMENT BUTTON
-
-                        Clicking this:
-                        1. Opens the modal
-                        2. Stores the enquiry ID in updateId
-                    ------------------------------------------------ */}
-
-                      <button
-                        onClick={() => openModal(item._id)}
-                        className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-emerald-600 dark:hover:bg-slate-800"
+                    return (
+                      <tr
+                        key={item._id}
+                        className="
+                          group
+                          transition-colors
+                          hover:bg-amber-50/30
+                        "
                       >
-                        <BiPencil size={15} />
-                      </button>
+                        {/* =================================================
+                            NAME
+                        ================================================== */}
 
-                      {/* ------------------------------------------------
-                        DELETE BUTTON
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-100/80 to-blue-50 text-sm font-bold text-amber-700 ring-1 ring-amber-100">
+                              {item.name?.charAt(0)?.toUpperCase() || "?"}
 
-                        Passes the enquiry ID to handleDelete().
-                    ------------------------------------------------ */}
+                              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500/70" />
+                            </div>
 
-                      <button
-                        onClick={() => handleDelete(item._id)}
-                        className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-red-600 dark:hover:bg-slate-800"
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-semibold text-slate-800">
+                                {item.name || "-"}
+                              </p>
+
+                              <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-400">
+                                ENQ-
+                                {String(index + 1).padStart(4, "0")}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* =================================================
+                            CONTACT
+                        ================================================== */}
+
+                        <td className="px-5 py-4">
+                          <div className="space-y-1.5">
+                            <div className="flex items-center gap-2 text-xs text-slate-600">
+                              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-50 text-blue-600">
+                                <FaEnvelope size={10} />
+                              </span>
+
+                              <span className="max-w-[180px] truncate">
+                                {item.email || "-"}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-xs text-slate-400">
+                              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-50 text-amber-700">
+                                <FaPhone size={10} />
+                              </span>
+
+                              <span>{item.phone || "-"}</span>
+                            </div>
+                          </div>
+                        </td>
+
+                        {/* =================================================
+                            SUBJECT
+                        ================================================== */}
+
+                        <td className="px-5 py-4">
+                          <span className="inline-flex max-w-[180px] items-center gap-1.5 truncate rounded-lg border border-blue-100 bg-blue-50/60 px-2.5 py-1.5 text-xs font-semibold text-blue-700">
+                            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500/70" />
+
+                            <span className="truncate">
+                              {item.subject || "-"}
+                            </span>
+                          </span>
+                        </td>
+
+                        {/* =================================================
+                            MESSAGE
+                        ================================================== */}
+
+                        <td className="max-w-[260px] px-5 py-4">
+                          <p
+                            className="truncate text-xs leading-5 text-slate-500"
+                            title={item.message}
+                          >
+                            {item.message || "-"}
+                          </p>
+                        </td>
+
+                        {/* =================================================
+                            DATE
+                        ================================================== */}
+
+                        <td className="px-5 py-4">
+                          <div className="inline-flex items-center gap-2 rounded-lg bg-slate-50 px-2.5 py-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/70" />
+
+                            <span className="text-[11px] font-medium text-slate-500">
+                              {item.createdAt
+                                ? new Date(item.createdAt).toLocaleDateString(
+                                    "en-IN",
+                                  )
+                                : "-"}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* =================================================
+                            STATUS
+                        ================================================== */}
+
+                        <td className="px-5 py-4">
+                          <span
+                            className={`
+                              inline-flex items-center gap-1.5
+                              rounded-full
+                              border
+                              px-2.5 py-1
+                              text-[10px]
+                              font-bold
+                              uppercase
+                              tracking-wide
+
+                              ${
+                                isCompleted
+                                  ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+                                  : isPending
+                                    ? "border-amber-100 bg-amber-50 text-amber-700"
+                                    : "border-blue-100 bg-blue-50 text-blue-700"
+                              }
+                            `}
+                          >
+                            <span
+                              className={`
+                                h-1.5 w-1.5 rounded-full
+
+                                ${
+                                  isCompleted
+                                    ? "bg-emerald-500/70"
+                                    : isPending
+                                      ? "bg-amber-500/70"
+                                      : "bg-blue-500/70"
+                                }
+                              `}
+                            />
+
+                            {item.status || "New"}
+                          </span>
+                        </td>
+
+                        {/* =================================================
+                            COMMENT
+                        ================================================== */}
+
+                        <td className="max-w-[180px] px-5 py-4">
+                          {item.comment ? (
+                            <p
+                              title={item.comment}
+                              className="truncate text-xs text-slate-500"
+                            >
+                              {item.comment}
+                            </p>
+                          ) : (
+                            <span className="text-xs text-slate-300">
+                              No comment
+                            </span>
+                          )}
+                        </td>
+
+                        {/* =================================================
+                            ACTIONS
+                        ================================================== */}
+
+                        <td className="px-5 py-4">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {/* EDIT */}
+
+                            <button
+                              type="button"
+                              title="Edit enquiry"
+                              onClick={() => openModal(item._id)}
+                              className="
+                                flex h-8 w-8 items-center justify-center
+                                rounded-lg
+                                border border-blue-100
+                                bg-blue-50/50
+                                text-blue-600
+                                transition
+                                hover:bg-blue-100
+                                hover:text-blue-700
+                              "
+                            >
+                              <BiPencil size={15} />
+                            </button>
+
+                            {/* DELETE */}
+
+                            <button
+                              type="button"
+                              title="Delete enquiry"
+                              onClick={() => handleDelete(item._id)}
+                              className="
+                                flex h-8 w-8 items-center justify-center
+                                rounded-lg
+                                border border-red-100
+                                bg-red-50/40
+                                text-red-500
+                                transition
+                                hover:bg-red-100
+                                hover:text-red-600
+                              "
+                            >
+                              <BsTrash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+
+                  {/* =================================================
+                      EMPTY STATE
+                  ================================================== */}
+
+                  {!state?.enquiryList?.length && (
+                    <tr>
+                      <td
+                        colSpan={enquiry.length}
+                        className="px-6 py-16 text-center"
                       >
-                        <BsTrash2 size={15} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </DataTable>
+                        <div className="mx-auto flex max-w-sm flex-col items-center">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+                            <FaEnvelopeOpenText size={19} />
+                          </div>
+
+                          <h3 className="mt-4 text-sm font-bold text-slate-800">
+                            No enquiries found
+                          </h3>
+
+                          <p className="mt-1 text-xs leading-5 text-slate-400">
+                            New school enquiries will appear here once they are
+                            received.
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </DataTable>
+            </div>
+          </div>
         )}
-        {/* ======================================================
-            ENQUIRY DATA TABLE
-            ------------------------------------------------------
-            Displays all enquiries in a tabular format.
-        ====================================================== */}
       </PageContent>
 
-      {/* ==========================================================
-          UPDATE / COMMENT MODAL
-          ----------------------------------------------------------
-          This modal opens when the user clicks the edit button.
+      {/* =====================================================
+          COMMENT MODAL
+      ===================================================== */}
 
-          The selected enquiry ID is stored in:
-          updateId
-      ========================================================== */}
-
-      <Modal title="Comment For Status Of Enquiry">
-        {/* --------------------------------------------------------
-            UPDATE FORM
-            --------------------------------------------------------
-            When the form is submitted:
-
-            handleUpdate(e, updateId)
-
-            is called.
-
-            updateId tells the backend which enquiry should
-            be updated.
-        -------------------------------------------------------- */}
-
+      <Modal title="Update Enquiry">
         <form className="space-y-5" onSubmit={(e) => handleUpdate(e, updateId)}>
-          {/* ======================================================
-              COMMENT FIELD
-          ====================================================== */}
+          {/* MODAL INTRO */}
+
+          <div className="rounded-xl border border-amber-100 bg-gradient-to-r from-[#fffdf7] to-amber-50/50 p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100/70 text-amber-700">
+                <FaEnvelopeOpenText size={15} />
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-slate-800">
+                  Enquiry Follow-up
+                </p>
+
+                <p className="mt-1 text-xs leading-5 text-slate-400">
+                  Add a comment or note about the current enquiry status.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* COMMENT */}
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
-              Any Comment Related To Enquiry
+            <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
+              Enquiry Comment
             </label>
-
-            {/* ----------------------------------------------------
-                COMMENT TEXTAREA
-
-                setComment() updates the comment in context/state.
-
-                The value prop is currently commented out.
-                Ideally, if your context contains comment state,
-                you should use:
-
-                value={comment}
-            ---------------------------------------------------- */}
 
             <textarea
               rows={5}
-              // value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Write your comment here..."
-              className="w-full resize-none rounded border border-slate-200 p-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
+              placeholder="Write a follow-up note or comment..."
+              className="
+                w-full
+                resize-none
+                rounded-xl
+                border
+                border-slate-200
+                bg-white
+                px-4
+                py-3
+                text-sm
+                leading-6
+                text-slate-700
+                outline-none
+                transition
+                placeholder:text-slate-300
+                focus:border-amber-300
+                focus:ring-4
+                focus:ring-amber-50
+              "
             />
           </div>
 
-          {/* ======================================================
-              FORM SUBMIT BUTTON
-          ====================================================== */}
+          {/* BUTTON */}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end border-t border-slate-100 pt-4">
             <button
               type="submit"
-              className="primary-bg rounded px-4 py-2 text-white"
+              className="
+                inline-flex items-center gap-2
+                rounded-xl
+                bg-amber-600
+                px-5 py-2.5
+                text-sm font-semibold
+                text-white
+                shadow-sm
+                transition
+                hover:bg-amber-700
+                hover:shadow
+                focus:outline-none
+                focus:ring-2
+                focus:ring-amber-200
+                focus:ring-offset-2
+              "
             >
               Save Comment
             </button>

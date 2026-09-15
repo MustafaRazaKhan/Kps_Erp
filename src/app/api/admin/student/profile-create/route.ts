@@ -2,11 +2,9 @@
 
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-// import ClassModel from "@/models/Class";
 import connectDB from "@/utils/mongodb";
 import { Student } from "@/models/Student";
 import Fee from "@/models/Fee";
-import { ImInsertTemplate } from "react-icons/im";
 import ClassModel from "@/models/Class";
 
 /* ================= POST ================= */
@@ -46,7 +44,7 @@ export async function POST(req: Request) {
     if (exsistUserId) {
       return NextResponse.json({
         success: false,
-        message: "Profile is Already Created",
+        message: "Profile is Already Exisit",
       });
     }
 
@@ -59,6 +57,9 @@ export async function POST(req: Request) {
     /* ================= STUDENT DATA ================= */
 
     const studentData = {
+      classId: formData.get("classId"),
+
+      userId: userId,
       srNo: formData.get("srNo"),
 
       session: formData.get("session"),
@@ -117,10 +118,6 @@ export async function POST(req: Request) {
 
       homeTown: formData.get("homeTown"),
 
-      classId: formData.get("classId"),
-
-      userId,
-
       notes: formData.get("notes"),
       feeGroup: formData.get("feeGroup"),
       busRoute: formData.get("busRoute"),
@@ -143,26 +140,26 @@ export async function POST(req: Request) {
 
     let totalMonthFee = 0;
     let totalBusFee = 0;
-    let totalFee = 0;
+    let totalYearFee = 0;
 
     if (studentData.feeGroup && classData) {
       // Find the fee structure for the student's fee group
-      const feeCategoryGroup = await Fee.findOne({
-        feeCategoryValue: studentData.feeGroup,
+      const feeStructure = await Fee.findOne({
+        feeGroup: studentData.feeGroup,
       });
-
-      if (!feeCategoryGroup) {
+      console.log(feeStructure);
+      if (!feeStructure) {
         throw new Error("Fee structure not found for this fee group.");
       }
 
       // Find fee for the student's class
-      const classFee = feeCategoryGroup.monthList.find(
+      const feeRecord = feeStructure.monthFeeList.find(
         (item: any) => item.selectedClass === classData.name,
       );
-      console.log(classFee);
+      // console.log(classFee);
 
-      console.log(classFee, "classFee");
-      if (!classFee) {
+      // console.log(classFee, "classFee");
+      if (!feeRecord) {
         throw new Error(`Fee structure not found for ${classData.name}.`);
       }
 
@@ -170,17 +167,17 @@ export async function POST(req: Request) {
       // Monthly Fee - 12 Months
       // ==============================
 
-      const monthlyFee = Number(classFee.monthFee || 0);
+      const monthlyFee = Number(feeRecord.monthFee || 0);
 
       totalMonthFee = monthlyFee * 12;
-      console.log(totalMonthFee, "totalMonthFee");
+      // console.log(totalMonthFee, "totalMonthFee");
 
       // ==============================
       // Bus Fee - 12 Months
       // ==============================
 
       if (studentData.busRoute) {
-        const busFee = Number(classFee.busFee || 0);
+        const busFee = Number(feeRecord.busFee || 0);
 
         totalBusFee = busFee * 12;
       }
@@ -189,15 +186,15 @@ export async function POST(req: Request) {
       // One-Time Fees
       // ==============================
 
-      const admissionFee = Number(feeCategoryGroup.admissionFee || 0);
+      const admissionFee = Number(feeStructure.admissionFee || 0);
 
-      const annualFee = Number(feeCategoryGroup.annualFee || 0);
+      const annualFee = Number(feeStructure.annualFee || 0);
 
-      const examinationFee = Number(feeCategoryGroup.examinationFee || 0);
+      const examinationFee = Number(feeStructure.examinationFee || 0);
 
-      const registrationFee = Number(feeCategoryGroup.registrationFee || 0);
+      const registrationFee = Number(feeStructure.registrationFee || 0);
 
-      const securityFee = Number(feeCategoryGroup.securityFee || 0);
+      const securityFee = Number(feeStructure.securityFee || 0);
 
       // console.log("========== FEE CALCULATION ==========");
 
@@ -215,9 +212,9 @@ export async function POST(req: Request) {
       // Total Fee
       // ==============================
 
-      totalFee =
+      totalYearFee =
         totalMonthFee +
-        // totalBusFee +
+        totalBusFee +
         admissionFee +
         annualFee +
         examinationFee +
@@ -227,11 +224,10 @@ export async function POST(req: Request) {
 
     // console.log(totalMonthFee, "outside");
     // console.log(totalFee, "outside");
-    console.log("Saving Student...");
     console.log({
       totalMonthFee,
       totalBusFee,
-      totalFee,
+      totalYearFee,
       feeGroup: studentData.feeGroup,
       classId: studentData.classId,
     });
@@ -241,14 +237,10 @@ export async function POST(req: Request) {
 
       totalMonthFee: totalMonthFee,
       totalBusFee: totalBusFee,
-      totalFee: totalFee,
+      totalYearFee: totalYearFee,
     });
-    // console.log(newStudent);
-    console.log("Saved Student:", {
-      totalMonthFee: newStudent.totalMonthFee,
-      totalBusFee: newStudent.totalBusFee,
-      totalFee: newStudent.totalFee,
-    });
+    console.log(newStudent);
+
     return NextResponse.json(
       {
         success: true,

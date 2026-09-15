@@ -32,10 +32,10 @@ import {
   FiClipboard,
   FiClock,
 } from "react-icons/fi";
-
 import { useStudent } from "@/store/admin/context/student.context";
 import PageLayout from "@/components/common/PageLayout";
 import PageContent from "@/components/common/PageContent";
+import { useSession } from "next-auth/react";
 
 /* =========================================================
    SMALL INFO ITEM
@@ -213,11 +213,10 @@ const ParentCard = ({
    PAGE
 ========================================================= */
 
-export default function StudentDetailPage() {
+export default function StudentViewProfile() {
   const { state, studentDetail } = useStudent();
-
-  const params = useParams();
-  const id = params?.id as string;
+  const { data } = useSession();
+  const id = data?.user.id;
 
   const printRef = useRef<HTMLDivElement>(null);
 

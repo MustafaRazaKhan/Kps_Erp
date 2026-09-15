@@ -87,7 +87,7 @@ const FeeDetails = () => {
             </div>
 
             <div className="border border-[#003366] px-3 py-1 text-sm font-bold text-[#003366]">
-              {fee.feeCategoryValue}
+              {fee.feeGroup}
             </div>
           </div>
 
