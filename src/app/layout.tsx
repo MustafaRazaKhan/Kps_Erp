@@ -14,6 +14,7 @@ import "./globals.css";
 import Providers from "./providers";
 import { AuthProvider } from "@/store/admin/context/auth.context";
 import { TransportProvider } from "@/store/admin/context/transport.context";
+import { StudentPortalProvider } from "@/store/user/student/context/student-portal.context";
 
 const OpenSans = Open_Sans({
   variable: "--font-open-sans",
@@ -45,7 +46,11 @@ export default function RootLayout({
                         <UserProvider>
                           <TransportProvider>
                             <FeeProvider>
-                              <StudentProvider>{children}</StudentProvider>
+                              <StudentProvider>
+                                <StudentPortalProvider>
+                                  {children}
+                                </StudentPortalProvider>
+                              </StudentProvider>
                             </FeeProvider>
                           </TransportProvider>
                         </UserProvider>

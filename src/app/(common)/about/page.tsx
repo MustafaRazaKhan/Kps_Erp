@@ -5,94 +5,236 @@ import Navbar from "@/components/home/Navbar";
 
 export default function About() {
   return (
-    <div className="bg-white primary-text">
+    <div className="relative min-h-screen overflow-hidden bg-[#fffdf7] text-stone-700">
+      {/* =====================================================
+          PAGE BACKGROUND IMAGE
+      ====================================================== */}
+
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/about-bg.jpg')",
+        }}
+      />
+
+      {/* Warm overlay over background image */}
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[#fffdf7]/90" />
+
       <Navbar />
 
-      {/* HERO */}
-      <section className="primary-bg py-24 sm:py-32 text-white">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <span className="inline-flex rounded border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium backdrop-blur">
-            About Us
-          </span>
+      <main>
+        {/* =====================================================
+            HERO
+        ====================================================== */}
 
-          <h1 className="mt-8 text-5xl font-bold leading-tight sm:text-6xl">
-            Shaping Bright Futures at
-            <span className="block">Rose Valley Public School</span>
-          </h1>
+        <section className="relative border-b border-[#eadfbe] bg-[#fff9e8]/80">
+          <div className="mx-auto max-w-5xl px-6 py-20 text-center sm:py-24 lg:py-28">
+            <span className="inline-flex items-center rounded-full border border-[#e4d39f] bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#9b7623] shadow-sm backdrop-blur">
+              About Our School
+            </span>
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-white/80">
-            We are committed to nurturing academic excellence, strong values,
-            discipline, and holistic growth.
-          </p>
-        </div>
-      </section>
+            <h1 className="mt-7 text-4xl font-bold leading-tight tracking-tight text-stone-800 sm:text-5xl lg:text-6xl">
+              Shaping Bright Futures
+              <span className="mt-2 block text-[#b58a28]">
+                Through Education
+              </span>
+            </h1>
 
-      {/* ABOUT */}
-      <section className="py-24">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] primary-text">
-            Who We Are
-          </span>
-
-          <h2 className="mt-4 text-4xl font-bold primary-text">
-            Excellence in Education & Character
-          </h2>
-
-          <p className="mx-auto mt-8 max-w-3xl text-lg leading-8 secondary-text">
-            At Rose Valley Public School, we believe education extends beyond
-            textbooks.
-          </p>
-        </div>
-      </section>
-
-      {/* VISION & MISSION */}
-      <section className="bg-gray-50 py-24">
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 md:grid-cols-2">
-          <div className="bg-white p-10 border rounded-3xl shadow-sm">
-            <div className="text-3xl">✨</div>
-
-            <h3 className="mt-6 text-2xl font-semibold primary-text">
-              Our Vision
-            </h3>
-
-            <p className="mt-4 leading-7 secondary-text">
-              To inspire globally minded individuals with strong values.
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-stone-500 sm:text-lg">
+              At Krishna Public School, we believe education is not only about
+              academic success, but also about developing confidence, character,
+              curiosity and a strong sense of responsibility.
             </p>
           </div>
+        </section>
 
-          <div className="bg-white p-10 border rounded-3xl shadow-sm">
-            <div className="text-3xl">🌱</div>
+        {/* =====================================================
+            WHO WE ARE
+        ====================================================== */}
 
-            <h3 className="mt-6 text-2xl font-semibold primary-text">
-              Our Mission
-            </h3>
-
-            <p className="mt-4 leading-7 secondary-text">
-              To provide a safe and inspiring environment for students.
+        <section className="py-20 lg:py-24">
+          <div className="mx-auto max-w-5xl px-6 text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a17b25]">
+              Who We Are
             </p>
+
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-stone-800 sm:text-4xl">
+              Excellence in Education & Character
+            </h2>
+
+            <div className="mx-auto mt-7 max-w-3xl rounded-3xl border border-[#eadfbe] bg-white/80 p-7 shadow-sm backdrop-blur-sm sm:p-10">
+              <p className="text-base leading-8 text-stone-500">
+                At Krishna Public School, we believe education extends beyond
+                textbooks and examinations. Our aim is to create an environment
+                where every student feels encouraged to learn, explore,
+                participate and grow.
+              </p>
+
+              <p className="mt-5 text-base leading-8 text-stone-500">
+                Through dedicated teachers, meaningful learning experiences and
+                a supportive school community, we strive to help students build
+                the knowledge, skills and values they need for the future.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* PRINCIPAL MESSAGE */}
-      <section className="py-24">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <span className="text-sm font-semibold uppercase tracking-[0.2em] primary-text">
-            Leadership Message
-          </span>
+        {/* =====================================================
+            VISION & MISSION
+        ====================================================== */}
 
-          <h2 className="mt-4 text-4xl font-bold primary-text">
-            Principal’s Message
-          </h2>
+        <section className="border-y border-[#eadfbe] bg-[#fff9e8]/70 py-20 lg:py-24">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a17b25]">
+                Our Foundation
+              </p>
 
-          <div className="mt-10 rounded-3xl border bg-gray-50 p-10 sm:p-14">
-            <p className="text-xl italic leading-9 secondary-text">
-              “Education is about shaping character and building future
-              leaders.”
-            </p>
+              <h2 className="mt-3 text-3xl font-bold text-stone-800 sm:text-4xl">
+                Vision & Mission
+              </h2>
+            </div>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {/* Vision */}
+              <div className="group rounded-3xl border border-[#eadfbe] bg-white/90 p-8 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-md sm:p-10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff3c4] text-2xl">
+                  ✨
+                </div>
+
+                <h3 className="mt-6 text-2xl font-bold text-stone-800">
+                  Our Vision
+                </h3>
+
+                <p className="mt-4 leading-7 text-stone-500">
+                  To inspire students to become confident, responsible and
+                  globally minded individuals who are prepared to contribute
+                  positively to society.
+                </p>
+              </div>
+
+              {/* Mission */}
+              <div className="group rounded-3xl border border-[#eadfbe] bg-white/90 p-8 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:shadow-md sm:p-10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff3c4] text-2xl">
+                  🌱
+                </div>
+
+                <h3 className="mt-6 text-2xl font-bold text-stone-800">
+                  Our Mission
+                </h3>
+
+                <p className="mt-4 leading-7 text-stone-500">
+                  To provide a safe, inclusive and inspiring learning
+                  environment where students can develop academically, socially
+                  and personally.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* =====================================================
+            PRINCIPAL MESSAGE
+        ====================================================== */}
+
+        <section className="py-20 lg:py-24">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a17b25]">
+                Leadership
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold text-stone-800 sm:text-4xl">
+                Principal's Message
+              </h2>
+            </div>
+
+            <div className="relative mt-10 overflow-hidden rounded-3xl border border-[#eadfbe] bg-white/85 p-8 shadow-sm backdrop-blur sm:p-12">
+              {/* Decorative quote */}
+              <div className="absolute -right-3 -top-8 select-none text-[160px] font-serif leading-none text-[#fff0bd]">
+                "
+              </div>
+
+              <div className="relative">
+                <div className="mb-7 h-1 w-12 rounded-full bg-[#c59a32]" />
+
+                <p className="text-lg italic leading-8 text-stone-500 sm:text-xl sm:leading-9">
+                  “Education is about shaping character, encouraging curiosity
+                  and building the confidence to face the future.”
+                </p>
+
+                <div className="mt-8">
+                  <p className="text-sm font-bold text-stone-800">Principal</p>
+
+                  <p className="mt-1 text-xs text-[#a17b25]">
+                    Krishna Public School
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =====================================================
+            VALUES
+        ====================================================== */}
+
+        <section className="border-t border-[#eadfbe] bg-[#fff9e8]/60 py-20">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a17b25]">
+                What We Believe In
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold text-stone-800 sm:text-4xl">
+                Values That Guide Us
+              </h2>
+            </div>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                [
+                  "01",
+                  "Discipline",
+                  "Building responsibility and good habits.",
+                ],
+                [
+                  "02",
+                  "Knowledge",
+                  "Encouraging curiosity and lifelong learning.",
+                ],
+                [
+                  "03",
+                  "Character",
+                  "Developing honesty, respect and integrity.",
+                ],
+                [
+                  "04",
+                  "Growth",
+                  "Supporting every student's individual journey.",
+                ],
+              ].map(([number, title, description]) => (
+                <div
+                  key={number}
+                  className="rounded-2xl border border-[#eadfbe] bg-white/90 p-6 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-md"
+                >
+                  <span className="text-xs font-bold text-[#c59a32]">
+                    {number}
+                  </span>
+
+                  <h3 className="mt-4 text-base font-bold text-stone-800">
+                    {title}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-stone-500">
+                    {description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>

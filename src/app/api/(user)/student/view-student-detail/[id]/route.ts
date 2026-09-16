@@ -2,6 +2,7 @@ import { Student } from "@/models/Student";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectDB from "@/utils/mongodb";
+import User from "@/models/User";
 
 export const GET = async (
   req: Request,
@@ -11,10 +12,11 @@ export const GET = async (
     await connectDB();
 
     const { id } = await params;
-    console.log("id", typeof id);
+    // console.log("id", typeof id);
+
     // co
 
-    console.log("Student ID:", id);
+    // console.log("Student ID:", id);
 
     // ✅ Validate MongoDB ID
 
@@ -28,14 +30,16 @@ export const GET = async (
       );
     }
 
-    // ✅ Find Student
-    // const objectId = new mongoose.Types.ObjectId(id);
+    const findStudentId = await User.findOne({ _id: id });
+    // console.log(findStudentId._id);
+    if (!findStudentId) {
+      return NextResponse.json({
+        success: false,
+        message: "Stundet Not found by userId",
+      });
+    }
 
-    // const student = await Student.findById(objectId)
-    //   .populate("userId")
-    //   .populate("classId");
-
-    const student = await Student.findById(id)
+    const student = await Student.findOne({ userId: findStudentId._id })
       .populate("userId")
       .populate("classId");
 

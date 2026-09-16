@@ -214,15 +214,15 @@ const ParentCard = ({
 ========================================================= */
 
 export default function StudentViewProfile() {
-  const { state, studentDetail } = useStudent();
+  const { state, studentDetail, viewStudentDetail } = useStudent();
   const { data } = useSession();
-  const id = data?.user.id;
+  const id = (data?.user as any).id;
 
   const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (id) {
-      studentDetail(id);
+      viewStudentDetail(id);
     }
   }, [id]);
 
