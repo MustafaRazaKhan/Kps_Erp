@@ -1,5 +1,6 @@
 export interface FeePayment {
   transactionId: string;
+  amount: number;
   paymentDateTime: string;
   feeType: "tuition" | "transport" | "";
   feeMonths: string[];

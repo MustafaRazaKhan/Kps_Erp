@@ -1,4 +1,4 @@
-import useSchool from "@/store/admin/context/school.context";
+import useSchool from "@/store/user/admin/context/school.context";
 import React, { useEffect } from "react";
 import {
   FaEnvelope,

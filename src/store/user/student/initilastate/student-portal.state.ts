@@ -10,6 +10,7 @@ const initialState: StudentPortalState = {
     feeMonths: [],
     paymentMode: "",
     remarks: "",
+    amount: 0,
   },
 
   feePaymentList: [],

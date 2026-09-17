@@ -93,6 +93,7 @@ const studentPortalReducer = (
           feeMonths: [],
           paymentMode: "",
           remarks: "",
+          amount: 0,
         },
       };
 

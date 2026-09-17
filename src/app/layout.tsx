@@ -3,17 +3,17 @@ import { Open_Sans } from "next/font/google";
 import { EnquiryProvider } from "@/store/common/context/enquiry.context";
 import { ToastContainer } from "react-toastify";
 import { SidebarProvider } from "@/store/common/context/toggle.sidebar.context";
-import { SchoolProvider } from "@/store/admin/context/school.context";
-import { ClassProvider } from "@/store/admin/context/class.context";
-import { UserProvider } from "@/store/admin/context/user.context";
-import { FeeProvider } from "@/store/admin/context/fee.context";
-import { StudentProvider } from "@/store/admin/context/student.context";
-import { ThemeProvider } from "@/store/admin/context/theme.context";
+import { SchoolProvider } from "@/store/user/admin/context/school.context";
+import { ClassProvider } from "@/store/user/admin/context/class.context";
+import { UserProvider } from "@/store/user/admin/context/user.context";
+import { FeeProvider } from "@/store/user/admin/context/fee.context";
+import { StudentProvider } from "@/store/user/admin/context/student.context";
+import { ThemeProvider } from "@/store/user/admin/context/theme.context";
 import { ModalProvider } from "@/store/common/context/modal.context";
 import "./globals.css";
 import Providers from "./providers";
-import { AuthProvider } from "@/store/admin/context/auth.context";
-import { TransportProvider } from "@/store/admin/context/transport.context";
+import { AuthProvider } from "@/store/user/admin/context/auth.context";
+import { TransportProvider } from "@/store/user/admin/context/transport.context";
 import { StudentPortalProvider } from "@/store/user/student/context/student-portal.context";
 
 const OpenSans = Open_Sans({

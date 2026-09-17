@@ -56,6 +56,7 @@ export const StudentPortalProvider = ({
   ====================================================== */
 
   const handleFeePaySubmit = async (e: any, userId: string) => {
+    e.preventDefault();
     try {
       dispatch({
         type: "SET_SUBMITTING",
@@ -97,11 +98,12 @@ export const StudentPortalProvider = ({
         body: JSON.stringify({
           userId,
           transactionId: form.transactionId,
-          paymentDate: form.paymentDateTime,
+          paymentDateTime: form.paymentDateTime,
           feeType: form.feeType,
           feeMonths: form.feeMonths,
           paymentMode: form.paymentMode,
           remarks: form.remarks,
+          amount: form.amount,
         }),
       });
 

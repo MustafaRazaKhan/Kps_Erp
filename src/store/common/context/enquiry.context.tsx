@@ -49,7 +49,7 @@ const EnquiryProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       // console.log(state.enquiryObj);
-      const data = await apiPOST("/api/enquiry", {
+      const data = await apiPOST("/api/enquiry/create-enquiry", {
         ...state.enquiryObj,
       });
       //   console.log(data);
@@ -78,7 +78,7 @@ const EnquiryProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       // console.log(state.enquiryObj);
-      const data = await apiGET("/api/enquiry");
+      const data = await apiGET("/api/admin/enquiry/enquiry-list");
       // console.log(data);
       if (data.success) {
         dispatch({
@@ -112,7 +112,7 @@ const EnquiryProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("clicked");
 
     try {
-      const res = await fetch(`/api/enquiry/update-enquiry/${id}`, {
+      const res = await fetch(`/api/admin/enquiry/update-enquiry/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +141,7 @@ const EnquiryProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleDelete = async (id: any) => {
     console.log(id);
-    const res = await fetch(`/api/enquiry/delete-enquiry/${id}`, {
+    const res = await fetch(`/api/admin/enquiry/delete-enquiry/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

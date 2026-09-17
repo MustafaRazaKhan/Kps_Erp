@@ -14,7 +14,7 @@ import {
 
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
-import useAuth from "@/store/admin/context/auth.context";
+import useAuth from "@/store/user/admin/context/auth.context";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
