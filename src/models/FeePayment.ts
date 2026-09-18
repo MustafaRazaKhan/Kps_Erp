@@ -1,39 +1,47 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-export interface IStudentFeePayment extends Document {
-  studentId: mongoose.Types.ObjectId;
-
-  transactionId: string;
-
-  paymentDateTime: Date;
-
-  feeType: string;
-
-  feeMonths: string[];
-
-  paymentMode: string;
-
-  totalYearFee: number;
-
-  amount: number;
-
-  remarks: string;
-
-  status: "pending" | "approved" | "rejected";
-
-  approvedAt?: Date;
-
-  rejectedAt?: Date;
-
-  adminRemarks?: string;
-}
-
-const StudentFeePaymentSchema = new Schema<IStudentFeePayment>(
+const FeePaymentSchema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    classId: {
+      type: Schema.Types.ObjectId,
+      ref: "ClassModel",
+    },
+    className: {
+      type: String,
+    },
+    classSection: {
+      type: String,
+    },
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    amount: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    totalMonthFee: {
+      type: Number,
+    },
+    totalBusFee: {
+      type: Number,
+    },
+    totalYearFee: {
+      type: Number,
+    },
+    remainingYearFee: {
+      type: Number,
+    },
     // ===================================================
     // STUDENT
     // ===================================================
-
     studentId: {
       type: Schema.Types.ObjectId,
       ref: "Student",
@@ -101,21 +109,9 @@ const StudentFeePaymentSchema = new Schema<IStudentFeePayment>(
     // TOTAL YEAR FEE
     // ===================================================
 
-    totalYearFee: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-
     // ===================================================
     // PAYMENT AMOUNT
     // ===================================================
-
-    amount: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
 
     // ===================================================
     // REMARKS
@@ -166,23 +162,19 @@ const StudentFeePaymentSchema = new Schema<IStudentFeePayment>(
 // =======================================================
 
 // One transaction ID can exist only once globally.
-StudentFeePaymentSchema.index({ transactionId: 1 }, { unique: true });
+FeePaymentSchema.index({ transactionId: 1 }, { unique: true });
 
 // A student can have many payments.
-StudentFeePaymentSchema.index({
+FeePaymentSchema.index({
   studentId: 1,
   createdAt: -1,
 });
 
 // Useful for admin pending-payment queries.
-StudentFeePaymentSchema.index({
+FeePaymentSchema.index({
   status: 1,
   createdAt: -1,
 });
 
-export const StudentFeePayment =
-  mongoose.models.StudentFeePayment ||
-  mongoose.model<IStudentFeePayment>(
-    "StudentFeePayment",
-    StudentFeePaymentSchema,
-  );
+export const FeePayment =
+  mongoose.models.FeePayment || mongoose.model("FeePayment", FeePaymentSchema);

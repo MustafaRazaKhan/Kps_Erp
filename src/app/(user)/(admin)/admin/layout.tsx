@@ -101,7 +101,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     {
       id: 189,
       name: "Fee Payment List",
-      link: "/admin/fee/fee-payment-history",
+      link: "/admin/fee/admin-view-fee-payment-history-list",
       icon: <FaFileInvoiceDollar size={18} />,
     },
     {

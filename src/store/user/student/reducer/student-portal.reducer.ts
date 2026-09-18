@@ -79,6 +79,12 @@ const studentPortalReducer = (
         success: action.payload,
       };
 
+    case "SET_STUDENT_PROFILE":
+      return {
+        ...state,
+        studentProfile: action.payload,
+      };
+
     /* =====================================================
        RESET FEE FORM
     ====================================================== */

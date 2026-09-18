@@ -24,13 +24,13 @@ const navData = [
   {
     id: 1,
     name: "Pay Fee",
-    link: "/student/pay-fee",
+    link: "/student/fee/pay-fee",
     icon: <FaRupeeSign size={18} />,
   },
   {
     id: 3,
     name: "Payment History",
-    link: "/student/fee-installment-list",
+    link: "/student/fee/payment-history",
     icon: <FaRupeeSign size={18} />,
   },
   {

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectDB from "@/utils/mongodb";
 import User from "@/models/User";
+import ClassModel from "@/models/Class";
 
 export const GET = async (
   req: Request,
@@ -12,7 +13,7 @@ export const GET = async (
     await connectDB();
 
     const { id } = await params;
-    // console.log("id", typeof id);
+    console.log("id", id, typeof id);
 
     // co
 
@@ -31,7 +32,7 @@ export const GET = async (
     }
 
     const findStudentId = await User.findOne({ _id: id });
-    // console.log(findStudentId._id);
+    console.log(findStudentId._id);
     if (!findStudentId) {
       return NextResponse.json({
         success: false,
@@ -40,8 +41,16 @@ export const GET = async (
     }
 
     const student = await Student.findOne({ userId: findStudentId._id })
-      .populate("userId")
-      .populate("classId");
+      .populate({
+        path: "classId",
+        model: ClassModel,
+      })
+      .populate({
+        path: "userId",
+        model: User,
+      });
+    // .populate("userId")
+    // .populate("classId");
 
     // ✅ Student Not Found
 

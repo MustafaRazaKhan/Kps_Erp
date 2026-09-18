@@ -117,47 +117,24 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   const studentDetail = async (id: string) => {
-    console.log("id>>>>>>>>", id);
     try {
       const res = await fetch(`/api/admin/student/view-detail/${id}`);
-      console.log(res);
 
       const data = await res.json();
-      console.log(data);
 
       if (!res.ok) {
         throw new Error(data.message || "Failed to fetch student");
       }
 
       dispatch({
-        type: "SET_SINGLE_STUDENT",
+        type: "SET_STUDENT_DETAIL",
         payload: data.data,
       });
     } catch (error: any) {
       console.error("FETCH ERROR:", error);
     }
   };
-  const viewStudentDetail = async (id: string) => {
-    console.log("id>>>>>>>>", id);
-    try {
-      const res = await fetch(`/api/student/view-student-detail/${id}`);
-      console.log(res);
 
-      const data = await res.json();
-      console.log(data);
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to fetch student");
-      }
-
-      dispatch({
-        type: "SET_SINGLE_STUDENT",
-        payload: data.data,
-      });
-    } catch (error: any) {
-      console.error("FETCH ERROR:", error);
-    }
-  };
   // const handleUpdate = async (e: any) => {
   //   e.preventDefault();
 
@@ -237,7 +214,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
         handleSubmit,
         studentList,
         studentDetail,
-        viewStudentDetail,
+
         // getStudents,
         // handleUpdate,
         // filterStudents,

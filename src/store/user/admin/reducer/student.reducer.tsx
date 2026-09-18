@@ -1,3 +1,5 @@
+import { StudentAction, StudentState } from "../types/student.type";
+
 const studentReducer = (
   state: StudentState,
   action: StudentAction,
@@ -27,7 +29,7 @@ const studentReducer = (
         studentList: action.payload,
         studentFilterBackup: action.payload,
       };
-    case "SET_SINGLE_STUDENT":
+    case "SET_STUDENT_DETAIL":
       return {
         ...state,
         studentDetail: action.payload,
@@ -36,7 +38,7 @@ const studentReducer = (
       const search = action.payload?.toLowerCase()?.trim() || "";
 
       const filterData = state.studentFilterBackup.filter(
-        (item) =>
+        (item: any) =>
           item.firstName?.toLowerCase().includes(search) ||
           item.lastName?.toLowerCase().includes(search),
         // item.srNo?.toLowerCase().includes(search)

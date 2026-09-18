@@ -438,7 +438,9 @@ import { NextResponse } from "next/server";
 
 import connectDB from "@/utils/mongodb";
 import { Student } from "@/models/Student";
-import { StudentFeePayment } from "@/models/FeePayment";
+import { FeePayment } from "@/models/FeePayment";
+import ClassModel from "@/models/Class";
+import User from "@/models/User";
 
 export async function POST(req: Request) {
   try {
@@ -456,6 +458,7 @@ export async function POST(req: Request) {
       userId,
       amount,
     } = body;
+    console.log(body);
 
     // =====================================================
     // VALIDATION
@@ -471,9 +474,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // =====================================================
-    // TRANSACTION ID
-    // =====================================================
+    // // =====================================================
+    // // TRANSACTION ID
+    // // =====================================================
 
     const trimmedTransactionId =
       typeof transactionId === "string" ? transactionId.trim() : "";
@@ -488,9 +491,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // =====================================================
-    // PAYMENT DATE
-    // =====================================================
+    // // =====================================================
+    // // PAYMENT DATE
+    // // =====================================================
 
     if (!paymentDateTime) {
       return NextResponse.json(
@@ -528,9 +531,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // =====================================================
-    // FEE MONTHS
-    // =====================================================
+    // // =====================================================
+    // // FEE MONTHS
+    // // =====================================================
 
     if (!Array.isArray(feeMonths) || feeMonths.length === 0) {
       return NextResponse.json(
@@ -542,9 +545,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // =====================================================
-    // PAYMENT MODE
-    // =====================================================
+    // // =====================================================
+    // // PAYMENT MODE
+    // // =====================================================
 
     if (!paymentMode) {
       return NextResponse.json(
@@ -556,9 +559,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // =====================================================
-    // AMOUNT
-    // =====================================================
+    // // =====================================================
+    // // AMOUNT
+    // // =====================================================
 
     const paymentAmount = Number(amount);
 
@@ -572,13 +575,22 @@ export async function POST(req: Request) {
       );
     }
 
-    // =====================================================
-    // FIND STUDENT
-    // =====================================================
+    // // =====================================================
+    // // FIND STUDENT
+    // // =====================================================
 
     const student = await Student.findOne({
       userId,
-    }).select("-photo");
+    })
+      .select("-photo")
+      .populate({
+        path: "classId",
+        model: ClassModel,
+      })
+      .populate({
+        path: "userId",
+        model: User,
+      });
 
     if (!student) {
       return NextResponse.json(
@@ -589,94 +601,125 @@ export async function POST(req: Request) {
         { status: 404 },
       );
     }
-
-    // =====================================================
-    // GET CURRENT REMAINING FEE
-    // =====================================================
-
-    const remainingFee = Number(student.remainingFee || 0);
-
-    // =====================================================
-    // CHECK REMAINING FEE
-    // =====================================================
-
-    if (remainingFee <= 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Your full fee has already been paid.",
-        },
-        { status: 400 },
-      );
-    }
-
-    // =====================================================
-    // CHECK PAYMENT AMOUNT
-    // =====================================================
-
-    if (paymentAmount > remainingFee) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: `Payment amount cannot be greater than remaining fee (${remainingFee})`,
-        },
-        { status: 400 },
-      );
-    }
-
-    // =====================================================
-    // CHECK DUPLICATE TRANSACTION ID
-    // =====================================================
-
-    const existingPayment = await StudentFeePayment.findOne({
-      transactionId: trimmedTransactionId,
-    }).lean();
-
-    if (existingPayment) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "This transaction ID has already been submitted",
-        },
-        { status: 409 },
-      );
-    }
-
-    // =====================================================
-    // CREATE PAYMENT
-    // =====================================================
-    //
-    // IMPORTANT:
-    //
-    // We DO NOT update student.remainingFee here.
-    //
-    // The payment is only pending.
-    //
-    // Admin will update remainingFee after approval.
-    //
-    // =====================================================
-
-    const payment = await StudentFeePayment.create({
+    // console.log(student);
+    const newFeeRecord = {
+      // Student/User information
+      userId: userId,
       studentId: student._id,
 
-      transactionId: trimmedTransactionId,
+      // Class information
+      classId: student.classId?._id ?? student.classId,
+      className: student.classId?.name,
+      classSection: student.classId?.section,
 
-      paymentDateTime: parsedPaymentDate,
+      // Student name
+      firstName: student.firstName,
+      lastName: student.lastName,
 
-      feeType,
+      // Fee information from student
+      totalMonthFee: student.totalMonthFee,
+      totalBusFee: student.totalBusFee,
+      totalYearFee: student.totalYearFee,
+      remainingYearFee: student.totalYearFee,
 
-      feeMonths,
+      // Payment information
+      amount: Number(amount),
+      transactionId: transactionId,
+      paymentDateTime: paymentDateTime,
+      feeType: feeType,
+      feeMonths: feeMonths,
+      paymentMode: paymentMode,
+      remarks: remarks,
+    };
+    const feeRecord = await FeePayment.create(newFeeRecord);
 
-      paymentMode,
+    // // =====================================================
+    // // GET CURRENT REMAINING FEE
+    // // =====================================================
 
-      totalYearFee: Number(student.totalYearFee),
+    // const remainingFee = Number(student.remainingFee || 0);
 
-      amount: paymentAmount,
+    // // =====================================================
+    // // CHECK REMAINING FEE
+    // // =====================================================
 
-      remarks: typeof remarks === "string" ? remarks.trim() : "",
+    // if (remainingFee <= 0) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "Your full fee has already been paid.",
+    //     },
+    //     { status: 400 },
+    //   );
+    // }
 
-      status: "pending",
-    });
+    // // =====================================================
+    // // CHECK PAYMENT AMOUNT
+    // // =====================================================
+
+    // if (paymentAmount > remainingFee) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: `Payment amount cannot be greater than remaining fee (${remainingFee})`,
+    //     },
+    //     { status: 400 },
+    //   );
+    // }
+
+    // // =====================================================
+    // // CHECK DUPLICATE TRANSACTION ID
+    // // =====================================================
+
+    // const existingPayment = await StudentFeePayment.findOne({
+    //   transactionId: trimmedTransactionId,
+    // }).lean();
+
+    // if (existingPayment) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message: "This transaction ID has already been submitted",
+    //     },
+    //     { status: 409 },
+    //   );
+    // }
+
+    // // =====================================================
+    // // CREATE PAYMENT
+    // // =====================================================
+    // //
+    // // IMPORTANT:
+    // //
+    // // We DO NOT update student.remainingFee here.
+    // //
+    // // The payment is only pending.
+    // //
+    // // Admin will update remainingFee after approval.
+    // //
+    // // =====================================================
+
+    // const payment = await StudentFeePayment.create({
+    //   studentId: student._id,
+
+    //   transactionId: trimmedTransactionId,
+
+    //   paymentDateTime: parsedPaymentDate,
+
+    //   feeType,
+
+    //   feeMonths,
+
+    //   paymentMode,
+
+    //   totalYearFee: Number(student.totalYearFee),
+
+    //   amount: paymentAmount,
+
+    //   remarks: typeof remarks === "string" ? remarks.trim() : "",
+
+    //   status: "pending",
+    // });
 
     // =====================================================
     // SUCCESS
@@ -688,18 +731,6 @@ export async function POST(req: Request) {
 
         message:
           "Fee payment submitted successfully. Waiting for admin verification.",
-
-        data: {
-          paymentId: payment._id,
-
-          transactionId: payment.transactionId,
-
-          amount: payment.amount,
-
-          status: payment.status,
-
-          remainingFee: student.remainingFee,
-        },
       },
       { status: 201 },
     );

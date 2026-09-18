@@ -10,7 +10,71 @@ const initialState: StudentPortalState = {
     feeMonths: [],
     paymentMode: "",
     remarks: "",
-    amount: 0,
+    amount: null,
+  },
+  studentProfile: {
+    srNo: "",
+
+    className: "",
+    section: "",
+    session: "",
+
+    firstName: "",
+    lastName: "",
+    gender: "",
+
+    dob: "",
+    dobInWords: "",
+    age: "",
+
+    bloodGroup: "",
+    religion: "",
+    casteCategory: "",
+
+    motherName: "",
+    fatherName: "",
+
+    motherNationality: "",
+    fatherNationality: "",
+
+    fatherOccupation: "",
+    motherOccupation: "",
+
+    motherMobileNumber: "",
+    fatherMobileNumber: "",
+
+    motherPermanentAddress: "",
+    fatherPermanentAddress: "",
+
+    officeAddress: "",
+
+    annualIncome: "",
+
+    localGurdianName: "",
+    localGurdianAddress: "",
+
+    lastSchoolName: "",
+    lastSchoolAddress: "",
+
+    isCbse: "",
+    otherBoard: "",
+
+    lastResult: "",
+    percentage: "",
+
+    subjectOffered: [],
+
+    motherTongue: "",
+    homeTown: "",
+
+    userId: "",
+    classId: "",
+
+    notes: "",
+
+    photo: null,
+
+    isActive: true,
   },
 
   feePaymentList: [],

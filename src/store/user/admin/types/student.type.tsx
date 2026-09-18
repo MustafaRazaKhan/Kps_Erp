@@ -117,7 +117,7 @@ export type StudentState = {
 export type StudentAction =
   | { type: "SET_LOADING" }
   | { type: "SET_STUDENTS"; payload: any }
-  | { type: "SET_SINGLE_STUDENT"; payload: any }
+  | { type: "SET_STUDENT_DETAIL"; payload: any }
   | { type: "FILTER_STUDENT"; payload: any }
   | {
       type: "HANDLE_CHANGE";

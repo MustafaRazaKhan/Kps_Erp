@@ -9,6 +9,9 @@ import PageLayout from "@/components/common/PageLayout";
 import Row from "@/components/common/Row";
 import { useStudentPortal } from "@/store/user/student/context/student-portal.context";
 import { useSession } from "next-auth/react";
+import { FaMoneyBill } from "react-icons/fa";
+import PageHeader from "@/components/common/PageHeader";
+import Button from "@/components/common/Button";
 
 const months = [
   "April",
@@ -24,6 +27,13 @@ const months = [
   "February",
   "March",
 ];
+const heading = {
+  name: "Add And Mangae Fee Installments",
+  subHeading: "Mangage Your All Fees Install Here",
+  href: "/student/fee/payment-history",
+  btnHeading: "Fee Payment List/History",
+  icon: <FaMoneyBill />,
+};
 
 const PayFee = () => {
   const { data } = useSession();
@@ -46,15 +56,7 @@ const PayFee = () => {
               HEADER
           ====================================================== */}
 
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-900">
-              Add Fee Installment
-            </h1>
-
-            <p className="mt-2 text-sm text-slate-500">
-              Submit your fee payment details for admin verification.
-            </p>
-          </div>
+          <PageHeader heading={heading} />
 
           {/* =====================================================
               TRANSACTION INFORMATION
@@ -82,7 +84,7 @@ const PayFee = () => {
             <InputField
               name="amount"
               label="Amount"
-              value={feePayment.amount}
+              value={feePayment.amount ?? ""}
               onChange={handleFeePayChange}
               placeholder="Enter Amount"
               type="number"
@@ -147,6 +149,36 @@ const PayFee = () => {
 
                   <p className="text-sm text-slate-500">
                     School transportation fee
+                  </p>
+                </div>
+              </label>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* both Fee */}
+
+              <label
+                className={`flex cursor-pointer items-center gap-3 rounded-xl border p-4 transition ${
+                  feePayment.feeType === "both"
+                    ? "border-[#ff0066] bg-pink-50"
+                    : "border-slate-200 bg-white hover:border-pink-200"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="feeType"
+                  value="both"
+                  checked={feePayment.feeType === "both"}
+                  onChange={handleFeePayChange}
+                  className="h-4 w-4 accent-[#ff0066]"
+                />
+
+                <div>
+                  <p className="font-semibold text-slate-800">
+                    Both(Tuition/Transport) Fee
+                  </p>
+
+                  <p className="text-sm text-slate-500">
+                    Both tuition/transportation fee
                   </p>
                 </div>
               </label>
@@ -291,29 +323,11 @@ const PayFee = () => {
               SUBMIT
           ====================================================== */}
 
-          <button
-            type="submit"
-            disabled={state.loading}
-            className="mt-8 rounded-xl bg-[#ff0066] px-7 py-3 font-semibold text-white transition hover:scale-[1.02] hover:bg-[#e6005c] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {state.loading ? "Submitting..." : "Submit Fee Payment"}
-          </button>
+          <Button title="Pay Fee" />
 
           {/* =====================================================
               RESPONSE
           ====================================================== */}
-
-          {state.error && (
-            <p className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
-              {state.error}
-            </p>
-          )}
-
-          {state.success && (
-            <p className="mt-4 rounded-lg bg-green-50 px-4 py-3 text-sm text-green-600">
-              {state.success}
-            </p>
-          )}
         </FormContainer>
       </PageContent>
     </PageLayout>

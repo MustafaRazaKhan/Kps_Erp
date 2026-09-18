@@ -2,31 +2,43 @@
 
 import React, { useEffect, useState } from "react";
 
-type Student = {
-  _id: string;
-  name?: string;
-  email?: string;
-  userId?: string;
-  totalYearFee?: number;
-  remainingFee?: number;
-};
-
 type FeePayment = {
   _id: string;
-  studentId: Student;
+
+  userId: string;
+  studentId: string;
+  classId: string;
+
+  className: string;
+  classSection: string;
+
+  firstName: string;
+  lastName: string;
+
+  amount: number;
+
+  totalMonthFee: number;
+  totalBusFee: number;
+  totalYearFee: number;
+  remainingYearFee: number;
+
   transactionId: string;
   paymentDateTime: string;
+
   feeType: string;
   feeMonths: string[];
+
   paymentMode: string;
-  totalYearFee: number;
-  amount: number;
   remarks?: string;
+
   status: "pending" | "approved" | "rejected";
+
   approvedAt?: string;
   rejectedAt?: string;
   adminRemarks?: string;
+
   createdAt: string;
+  updatedAt: string;
 };
 
 const FeePaymentHistoryList = () => {
@@ -34,18 +46,24 @@ const FeePaymentHistoryList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Payment ID currently being updated
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  // =====================================================
+  // FETCH PAYMENTS
+  // =====================================================
 
   const fetchPayments = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const response = await fetch("/api/fee/fee-payment-history", {
-        method: "GET",
-        cache: "no-store",
-      });
+      const response = await fetch(
+        "/api/admin/fee/admin-view-fee-payment-history-list",
+        {
+          method: "GET",
+          cache: "no-store",
+        },
+      );
 
       const result = await response.json();
 
@@ -93,11 +111,9 @@ const FeePaymentHistoryList = () => {
 
       const response = await fetch(`/api/admin/fee-payments/${paymentId}`, {
         method: "PATCH",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
           status,
         }),
@@ -109,10 +125,7 @@ const FeePaymentHistoryList = () => {
         throw new Error(result.message || `Failed to ${status} payment`);
       }
 
-      // =================================================
-      // UPDATE LOCAL STATE
-      // =================================================
-
+      // Update local state immediately
       setPayments((previousPayments) =>
         previousPayments.map((payment) =>
           payment._id === paymentId
@@ -132,12 +145,7 @@ const FeePaymentHistoryList = () => {
         ),
       );
 
-      // =================================================
-      // OPTIONAL:
-      // Fetch again so student remainingFee and all
-      // server-side data are completely up-to-date.
-      // =================================================
-
+      // Fetch again so all server-side values are current
       await fetchPayments();
 
       alert(
@@ -171,12 +179,12 @@ const FeePaymentHistoryList = () => {
   // FORMAT AMOUNT
   // =====================================================
 
-  const formatAmount = (amount: number) => {
+  const formatAmount = (amount: number | undefined) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
       maximumFractionDigits: 2,
-    }).format(amount || 0);
+    }).format(amount ?? 0);
   };
 
   // =====================================================
@@ -237,6 +245,73 @@ const FeePaymentHistoryList = () => {
       {/* ================================================= */}
       {/* HEADER */}
       {/* ================================================= */}
+      {/* ================================================= */}
+      {/* HEADER + SEARCH */}
+      {/* ================================================= */}
+
+      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        {/* TITLE */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Fee Payment History
+          </h2>
+
+          <p className="mt-1 text-sm text-gray-500">
+            Total payments: {payments.length}
+          </p>
+        </div>
+
+        {/* SEARCH */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search payments..."
+              className="h-10 w-full rounded-md border border-gray-300 bg-white px-4 pr-10 text-sm text-gray-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:w-[280px]"
+              // Search logic will be added later
+            />
+
+            {/* Search Icon */}
+            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m21 21-4.35-4.35m2.1-5.4a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
+                />
+              </svg>
+            </span>
+          </div>
+
+          {/* SEARCH BUTTON */}
+          <button
+            type="button"
+            onClick={() => {
+              // Search logic will be added later
+            }}
+            className="h-10 rounded-md bg-blue-600 px-5 text-sm font-medium text-white transition hover:bg-blue-700"
+          >
+            Search
+          </button>
+
+          {/* REFRESH BUTTON */}
+          <button
+            type="button"
+            onClick={fetchPayments}
+            disabled={loading}
+            className="h-10 rounded-md border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
 
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -270,11 +345,15 @@ const FeePaymentHistoryList = () => {
       ) : (
         <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1250px] text-left text-sm">
+            <table className="w-full min-w-[1500px] text-left text-sm">
               <thead className="border-b bg-gray-50">
                 <tr>
                   <th className="px-5 py-4 font-semibold text-gray-700">
                     Student
+                  </th>
+
+                  <th className="px-5 py-4 font-semibold text-gray-700">
+                    Class
                   </th>
 
                   <th className="px-5 py-4 font-semibold text-gray-700">
@@ -298,6 +377,14 @@ const FeePaymentHistoryList = () => {
                   </th>
 
                   <th className="px-5 py-4 font-semibold text-gray-700">
+                    Year Fee
+                  </th>
+
+                  <th className="px-5 py-4 font-semibold text-gray-700">
+                    Remaining
+                  </th>
+
+                  <th className="px-5 py-4 font-semibold text-gray-700">
                     Status
                   </th>
 
@@ -316,7 +403,10 @@ const FeePaymentHistoryList = () => {
                   const isUpdating = updatingId === payment._id;
 
                   return (
-                    <tr key={payment._id} className="hover:bg-gray-50">
+                    <tr
+                      key={payment._id}
+                      className="transition-colors hover:bg-gray-50"
+                    >
                       {/* ================================= */}
                       {/* STUDENT */}
                       {/* ================================= */}
@@ -324,13 +414,30 @@ const FeePaymentHistoryList = () => {
                       <td className="px-5 py-4">
                         <div>
                           <p className="font-medium text-gray-900">
-                            {payment.studentId?.name || "Unknown Student"}
+                            {payment.firstName} {payment.lastName}
+                          </p>
+
+                          <p className="mt-1 text-xs text-gray-500">
+                            Student ID:{" "}
+                            <span className="font-mono">
+                              {payment.studentId}
+                            </span>
+                          </p>
+                        </div>
+                      </td>
+
+                      {/* ================================= */}
+                      {/* CLASS */}
+                      {/* ================================= */}
+
+                      <td className="px-5 py-4">
+                        <div>
+                          <p className="font-medium uppercase text-gray-800">
+                            {payment.className}
                           </p>
 
                           <p className="text-xs text-gray-500">
-                            {payment.studentId?.email ||
-                              payment.studentId?.userId ||
-                              "-"}
+                            Section: {payment.classSection}
                           </p>
                         </div>
                       </td>
@@ -341,7 +448,7 @@ const FeePaymentHistoryList = () => {
 
                       <td className="px-5 py-4">
                         <span className="font-mono text-xs text-gray-700">
-                          {payment.transactionId}
+                          {payment.transactionId || "-"}
                         </span>
                       </td>
 
@@ -351,7 +458,7 @@ const FeePaymentHistoryList = () => {
 
                       <td className="px-5 py-4">
                         <span className="capitalize text-gray-700">
-                          {payment.feeType}
+                          {payment.feeType || "-"}
                         </span>
                       </td>
 
@@ -360,11 +467,11 @@ const FeePaymentHistoryList = () => {
                       {/* ================================= */}
 
                       <td className="px-5 py-4">
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex max-w-[220px] flex-wrap gap-1">
                           {payment.feeMonths?.length ? (
-                            payment.feeMonths.map((month) => (
+                            payment.feeMonths.map((month, index) => (
                               <span
-                                key={month}
+                                key={`${month}-${index}`}
                                 className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600"
                               >
                                 {month}
@@ -382,7 +489,7 @@ const FeePaymentHistoryList = () => {
 
                       <td className="px-5 py-4">
                         <span className="capitalize text-gray-700">
-                          {payment.paymentMode}
+                          {payment.paymentMode || "-"}
                         </span>
                       </td>
 
@@ -393,6 +500,32 @@ const FeePaymentHistoryList = () => {
                       <td className="px-5 py-4">
                         <span className="font-semibold text-gray-900">
                           {formatAmount(payment.amount)}
+                        </span>
+                      </td>
+
+                      {/* ================================= */}
+                      {/* YEAR FEE */}
+                      {/* ================================= */}
+
+                      <td className="px-5 py-4">
+                        <span className="font-medium text-gray-700">
+                          {formatAmount(payment.totalYearFee)}
+                        </span>
+                      </td>
+
+                      {/* ================================= */}
+                      {/* REMAINING FEE */}
+                      {/* ================================= */}
+
+                      <td className="px-5 py-4">
+                        <span
+                          className={
+                            payment.remainingYearFee > 0
+                              ? "font-semibold text-orange-600"
+                              : "font-semibold text-green-600"
+                          }
+                        >
+                          {formatAmount(payment.remainingYearFee)}
                         </span>
                       </td>
 
@@ -411,7 +544,7 @@ const FeePaymentHistoryList = () => {
                       </td>
 
                       {/* ================================= */}
-                      {/* DATE */}
+                      {/* PAYMENT DATE */}
                       {/* ================================= */}
 
                       <td className="whitespace-nowrap px-5 py-4 text-gray-600">
@@ -425,8 +558,6 @@ const FeePaymentHistoryList = () => {
                       <td className="px-5 py-4">
                         {payment.status === "pending" ? (
                           <div className="flex items-center gap-2">
-                            {/* APPROVE */}
-
                             <button
                               type="button"
                               disabled={isUpdating}
@@ -437,8 +568,6 @@ const FeePaymentHistoryList = () => {
                             >
                               {isUpdating ? "Updating..." : "Approve"}
                             </button>
-
-                            {/* REJECT */}
 
                             <button
                               type="button"

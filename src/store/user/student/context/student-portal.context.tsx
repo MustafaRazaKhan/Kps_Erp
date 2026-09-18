@@ -22,6 +22,27 @@ export const StudentPortalProvider = ({
 }) => {
   const [state, dispatch] = useReducer(studentPortalReducer, initialState);
 
+  const viewStudentDetail = async (id: string) => {
+    console.log(id);
+    try {
+      const res = await fetch(`/api/student/student-view-profile/${id}`);
+      console.log(res);
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to fetch student");
+      }
+
+      dispatch({
+        type: "SET_STUDENT_PROFILE",
+        payload: data.data,
+      });
+    } catch (error: any) {
+      console.error("FETCH ERROR:", error);
+    }
+  };
+
   /* =====================================================
      HANDLE FEE INPUT CHANGE
   ====================================================== */
@@ -56,6 +77,7 @@ export const StudentPortalProvider = ({
   ====================================================== */
 
   const handleFeePaySubmit = async (e: any, userId: string) => {
+    console.log(userId, state.feePayment);
     e.preventDefault();
     try {
       dispatch({
@@ -90,7 +112,7 @@ export const StudentPortalProvider = ({
         throw new Error("Please select payment mode");
       }
 
-      const res = await fetch("/api/student/payfee", {
+      const res = await fetch("/api/student/fee/pay-fee", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -194,6 +216,7 @@ export const StudentPortalProvider = ({
         getFeePaymentList,
 
         resetFeeForm,
+        viewStudentDetail,
       }}
     >
       {children}
