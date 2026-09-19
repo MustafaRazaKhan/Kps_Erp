@@ -66,7 +66,7 @@ const SchoolList = () => {
 
                 {/* Email */}
                 <td className="px-6 py-4">
-                  <p className="max-w-[220px] truncate text-sm text-slate-600 dark:text-slate-300">
+                  <p className="max-w-[220px]  text-sm text-slate-600 dark:text-slate-300">
                     {school.email}
                   </p>
                 </td>
@@ -80,7 +80,7 @@ const SchoolList = () => {
 
                 {/* Address */}
                 <td className="px-6 py-4">
-                  <p className="max-w-[250px] truncate text-sm text-slate-500 dark:text-slate-400">
+                  <p className="max-w-[250px]  text-sm text-slate-500 dark:text-slate-400">
                     {school.address}
                   </p>
                 </td>

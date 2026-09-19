@@ -103,7 +103,7 @@ const SchoolCreate = () => {
                 <label className="flex items-center gap-2 w-full px-3 py-3 bg-white border rounded  focus-within:ring-1 focus-within:ring-gray-400">
                   <FaImage className="text-gray-400 text-sm" />
 
-                  <span className="text-sm text-gray-600 truncate">
+                  <span className="text-sm text-gray-600 ">
                     {state.schoolObj.image?.name || "Upload school image"}
                   </span>
 

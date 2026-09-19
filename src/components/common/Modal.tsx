@@ -77,7 +77,7 @@ const Modal = ({ children, title }: ModalProps) => {
           <div className="min-w-0">
             <h2
               className="
-                truncate
+                
                 text-base
                 font-semibold
                 tracking-tight

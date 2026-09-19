@@ -133,7 +133,7 @@ const AddNewBookIssued = () => {
         </div>
 
         {/* Desktop Table */}
-        <div className="hidden md:block overflow-x-auto">
+        <div className="hidden md:block">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr className="text-left text-xs uppercase tracking-wide text-gray-500">

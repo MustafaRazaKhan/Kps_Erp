@@ -146,8 +146,8 @@ HEADER
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[1050px]">
+        <div className="">
+          <table className="">
             {/* =====================================================
             TABLE HEADER
         ===================================================== */}

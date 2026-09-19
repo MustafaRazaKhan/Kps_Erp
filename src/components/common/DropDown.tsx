@@ -74,11 +74,11 @@ export default function Dropdown({ isNavbar }: { isNavbar: boolean }) {
 
         {/* User information */}
         <div className="hidden max-w-[150px] text-left sm:block">
-          <p className="truncate text-sm font-semibold leading-5 text-stone-700">
+          <p className=" text-sm font-semibold leading-5 text-stone-700">
             Hi, {displayName}
           </p>
 
-          <p className="truncate text-xs text-stone-400">{roleName}</p>
+          <p className=" text-xs text-stone-400">{roleName}</p>
         </div>
 
         {/* Arrow */}
@@ -110,11 +110,11 @@ export default function Dropdown({ isNavbar }: { isNavbar: boolean }) {
                 </div>
 
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold capitalize text-stone-700">
+                  <p className=" text-sm font-bold capitalize text-stone-700">
                     {displayName}
                   </p>
 
-                  <p className="mt-0.5 truncate text-xs text-stone-400">
+                  <p className="mt-0.5  text-xs text-stone-400">
                     {user?.email || "No email available"}
                   </p>
 

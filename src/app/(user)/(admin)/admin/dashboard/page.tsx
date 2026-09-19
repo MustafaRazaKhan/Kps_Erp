@@ -343,7 +343,7 @@ const Page = () => {
                     {activity.title}
                   </p>
 
-                  <p className="mt-0.5 truncate text-xs text-slate-400">
+                  <p className="mt-0.5  text-xs text-slate-400">
                     {activity.description}
                   </p>
                 </div>

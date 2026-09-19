@@ -40,7 +40,7 @@ const Sidebar = ({ menuData }: any) => {
 
             {/* Brand */}
             <div className="min-w-0 leading-tight">
-              <h2 className="truncate text-sm font-bold text-stone-800">
+              <h2 className=" text-sm font-bold text-stone-800">
                 Krishna Public
               </h2>
 
@@ -109,7 +109,7 @@ const Sidebar = ({ menuData }: any) => {
                   </span>
 
                   {/* Label */}
-                  <span className="min-w-0 flex-1 truncate">{item.name}</span>
+                  <span className="min-w-0 flex-1 ">{item.name}</span>
 
                   {/* Active indicator dot */}
                   {isActive && (
@@ -142,9 +142,7 @@ const Sidebar = ({ menuData }: any) => {
                   System Online
                 </p>
 
-                <p className="mt-0.5 truncate text-[9px] text-stone-400">
-                  School ERP
-                </p>
+                <p className="mt-0.5  text-[9px] text-stone-400">School ERP</p>
               </div>
             </div>
           </div>

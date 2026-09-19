@@ -189,9 +189,7 @@ const PaymentRow = ({
         </div>
 
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-gray-800">
-            {title}
-          </p>
+          <p className=" text-sm font-semibold text-gray-800">{title}</p>
 
           <p className="mt-0.5 text-xs text-gray-400">{date}</p>
         </div>
@@ -239,9 +237,9 @@ const BookRow = ({
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-bold text-gray-800">{title}</p>
+        <p className=" text-sm font-bold text-gray-800">{title}</p>
 
-        <p className="mt-0.5 truncate text-xs text-gray-400">{author}</p>
+        <p className="mt-0.5  text-xs text-gray-400">{author}</p>
       </div>
 
       <div className="hidden text-right sm:block">

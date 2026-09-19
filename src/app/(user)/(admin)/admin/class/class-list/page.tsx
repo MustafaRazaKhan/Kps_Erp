@@ -169,7 +169,7 @@ export default function ClassList() {
               <Loader />
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="">
               <table className="w-full min-w-[1000px]">
                 <thead className="border-b border-slate-200 bg-slate-50/70">
                   <tr>

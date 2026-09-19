@@ -247,7 +247,7 @@ const FeeList = () => {
                       </div>
                     </div>
 
-                    <div className="overflow-x-auto rounded-xl border border-slate-200/80">
+                    <div className="rounded-xl border border-slate-200/80">
                       <table className="w-full min-w-[570px] text-xs">
                         <thead className="bg-blue-50/70">
                           <tr>
